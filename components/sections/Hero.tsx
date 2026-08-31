@@ -28,7 +28,12 @@ export default function Hero() {
       id="top"
       className="wash relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-20 pb-16"
     >
-      <div className="shell grid items-center gap-12 lg:grid-cols-[1fr_minmax(300px,420px)] lg:gap-16">
+      {/* Two equal columns rather than 1fr + a fixed rail. The old split left
+          the type sitting in a 670px column it only half filled, which opened a
+          dead gap down the middle of wide screens. The shell keeps its standard
+          width so the hero's left edge lines up with the header and every
+          section below it. */}
+      <div className="shell grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* ── The words ────────────────────────────────────────────────── */}
         <div className="text-center lg:text-left">
           <motion.div {...rise(0)}>
@@ -105,21 +110,22 @@ export default function Hero() {
             delay: reduced ? 0 : 0.35,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="relative mx-auto w-full max-w-[300px] lg:max-w-none"
+          className="relative mx-auto w-full max-w-75 lg:ml-auto lg:mr-0 lg:max-w-125"
         >
-          <div
-            aria-hidden="true"
-            className="absolute -inset-3 rounded-t-full rounded-b-2xl border border-gold/30"
-          />
-          <div className="relative aspect-3/4 overflow-hidden rounded-t-full rounded-b-2xl bg-blush-50">
-            <Image
-              src="/hero.jpeg"
-              alt="Ayomide leaning on Opeyemi's shoulder in a birdcage veil, he in a deep green suit"
-              fill
-              priority
-              sizes="(max-width: 1024px) 300px, 420px"
-              className="object-cover object-[55%_28%]"
-            />
+          {/* The frame is a padded wrapper, not an absolutely offset box: that
+              keeps the two arches concentric at every width. An -inset border
+              drifts out of parallel because the arch radius follows the box. */}
+          <div className="rounded-t-full rounded-b-2xl border border-gold/30 p-3">
+            <div className="relative aspect-3/4 overflow-hidden rounded-t-full rounded-b-2xl bg-blush-50">
+              <Image
+                src="/hero.jpeg"
+                alt="Ayomide leaning on Opeyemi's shoulder in a birdcage veil, he in a deep green suit"
+                fill
+                priority
+                sizes="(max-width: 1024px) 300px, 500px"
+                className="object-cover object-[55%_28%]"
+              />
+            </div>
           </div>
         </motion.div>
       </div>

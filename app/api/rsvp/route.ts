@@ -16,8 +16,9 @@ type Payload = {
   phone: string
   email: string
   attending: string
-  adults: number
   message: string
+  /** True when the guest asked for the invitation card, not just to be counted. */
+  requestedCard: boolean
 }
 
 function validate(body: unknown): { ok: true; data: Payload } | { ok: false; error: string } {
@@ -30,8 +31,8 @@ function validate(body: unknown): { ok: true; data: Payload } | { ok: false; err
   const phone = String(raw.phone ?? "").trim()
   const email = String(raw.email ?? "").trim()
   const attending = String(raw.attending ?? "").trim()
-  const adults = Number(raw.adults ?? 1)
   const message = String(raw.message ?? "").trim()
+  const requestedCard = raw.requestedCard === true
 
   if (name.length < 2 || name.length > 120) return { ok: false, error: "Invalid name." }
   if (phone.replace(/[^0-9]/g, "").length < 7 || phone.length > 40) {
@@ -41,12 +42,12 @@ function validate(body: unknown): { ok: true; data: Payload } | { ok: false; err
     return { ok: false, error: "Invalid email address." }
   }
   if (!ATTENDING.has(attending)) return { ok: false, error: "Invalid attendance choice." }
-  if (!Number.isFinite(adults) || adults < 1 || adults > 10) {
-    return { ok: false, error: "Invalid number of guests." }
-  }
   if (message.length > 500) return { ok: false, error: "Message is too long." }
 
-  return { ok: true, data: { name, phone, email, attending, adults, message } }
+  return {
+    ok: true,
+    data: { name, phone, email, attending, message, requestedCard },
+  }
 }
 
 export async function POST(request: Request) {

@@ -16,11 +16,8 @@ export type GiftItem = {
   id: string
   name: string
   category: GiftCategory
-  targetNaira: number
   /** Optional product photo in /public. Leave unset for the ornamental tile. */
   imageUrl?: string
-  /** Optional. Omit entirely and no progress bar is shown for this item. */
-  contributedNaira?: number
 }
 
 export type Fund = {
@@ -39,6 +36,18 @@ export type StoryEntry = {
 export type GalleryImage = {
   src: string
   alt: string
+  /**
+   * Real pixel dimensions. Three of these photographs were exported with white
+   * matting that had to be trimmed off, so they no longer share one aspect
+   * ratio — the grid needs the true numbers to reserve the right space and
+   * avoid a layout shift.
+   *
+   * If you replace a photo: drop the original in images/, point this entry at
+   * it in scripts/prepare-images.cjs, run `pnpm images`, and copy the width and
+   * height it prints back into this file.
+   */
+  width: number
+  height: number
 }
 
 export type Faq = { q: string; a: string }
@@ -71,6 +80,8 @@ export const wedding = {
   ceremonyAt: "2026-09-26T11:00:00.000Z",
 
   /* ── The families, exactly as printed on the invitation ─────────────────── */
+  // Not shown on the site any more — the invitation now opens in the couple's
+  // own voice. Kept here so the wording is not lost if you want it back.
   families: {
     bride: "Evang. Olatunji and Late Mrs Abosede Israel Eweje",
     groom: "Apostle Bamidele & Pst Mrs Kemi Olaide Ogunbore",
@@ -101,24 +112,21 @@ export const wedding = {
 
   /* ── Reaching the couple ────────────────────────────────────────────────── */
   rsvpPhones: [
-    { display: "+234 906 665 5494", tel: "+2349066655494" },
     { display: "+234 703 064 2133", tel: "+2347030642133" },
+    { display: "+234 906 665 5494", tel: "+2349066655494" },
   ],
 
   /* ── Colour of the day, straight off the card ───────────────────────────── */
   colours: [
     { name: "Blush Pink", hex: "#F2A6AC" },
-    { name: "Champagne", hex: "#F3D7B4" },
+    { name: "Champagne Gold", hex: "#F3D7B4" },
   ],
 
   /* ── Where the gifts go ─────────────────────────────────────────────────── */
   bank: {
-    // TODO(couple): supply the real account before launch. While these are
-    // empty the transfer sheet shows a friendly "details coming soon" notice
-    // with the RSVP numbers, rather than broken placeholder text.
-    accountName: "",
-    bankName: "",
-    accountNumber: "",
+    accountName: "Ayomide Israel",
+    bankName: "Zenith Bank",
+    accountNumber: "2418407121",
 
     /**
      * Optional second account for guests sending from abroad.
@@ -128,29 +136,22 @@ export const wedding = {
   },
 
   /* ── The gift table ─────────────────────────────────────────────────────── */
-  // TODO(couple): placeholders with estimated prices. Edit freely — rename,
-  // reprice, remove, add your own. Set `imageUrl` to a photo in /public to
-  // replace the ornamental tile. Add `contributedNaira` to show a progress bar
-  // on an item; omit it and no bar appears.
+  // No prices: the couple ask for cash, and guests give what is on their heart.
+  // Edit freely — rename, remove, add your own. Set `imageUrl` to a photo in
+  // /public to replace the ornamental tile.
   giftItems: [
-    { id: "deep-freezer", name: "Deep Freezer", category: "Kitchen", targetNaira: 450000 },
-    { id: "washing-machine", name: "Washing Machine", category: "Laundry", targetNaira: 520000 },
-    { id: "gas-cooker", name: "Gas Cooker", category: "Kitchen", targetNaira: 380000 },
-    { id: "smart-tv", name: "Smart Television", category: "Living", targetNaira: 650000 },
-    { id: "generator", name: "Generator", category: "Power", targetNaira: 850000 },
-    { id: "inverter", name: "Inverter & Battery", category: "Power", targetNaira: 1200000 },
-    { id: "microwave", name: "Microwave Oven", category: "Kitchen", targetNaira: 180000 },
-    { id: "air-fryer", name: "Air Fryer", category: "Kitchen", targetNaira: 195000 },
-    { id: "water-dispenser", name: "Water Dispenser", category: "Kitchen", targetNaira: 160000 },
-    { id: "granite-pots", name: "Granite Pot Set", category: "Kitchen", targetNaira: 145000 },
-    { id: "speaker", name: "Bluetooth Speaker", category: "Living", targetNaira: 120000 },
-    { id: "beddings", name: "Bedding Set", category: "Bedroom", targetNaira: 110000 },
-    { id: "dinnerware", name: "Dinnerware Set", category: "Kitchen", targetNaira: 95000 },
-    { id: "blender", name: "Blender", category: "Kitchen", targetNaira: 88000 },
-    { id: "standing-fan", name: "Standing Fan", category: "Living", targetNaira: 85000 },
-    { id: "pressing-iron", name: "Pressing Iron", category: "Laundry", targetNaira: 65000 },
-    { id: "knife-set", name: "Knife Set", category: "Kitchen", targetNaira: 55000 },
-    { id: "dish-rack", name: "Dish Rack", category: "Kitchen", targetNaira: 38000 },
+    { id: "refrigerator", name: "Refrigerator", category: "Kitchen" },
+    { id: "heavy-duty-blender", name: "Heavy Duty Blender", category: "Kitchen" },
+    { id: "food-processor", name: "Food Processor", category: "Kitchen" },
+    { id: "toaster", name: "Toaster", category: "Kitchen" },
+    { id: "rice-cooker", name: "Rice Cooker", category: "Kitchen" },
+    { id: "juicer", name: "Juicer", category: "Kitchen" },
+    { id: "non-stick-cookware", name: "Set of Non-stick Cookware", category: "Kitchen" },
+    { id: "granite-cookware", name: "Set of Granite Cookware", category: "Kitchen" },
+    { id: "washing-machine", name: "Automatic Washing Machine", category: "Laundry" },
+    { id: "air-conditioner", name: "Air Conditioner", category: "Living" },
+    { id: "smart-tv", name: "Smart Television", category: "Living" },
+    { id: "soundbar", name: "Soundbar", category: "Living" },
   ] as GiftItem[],
 
   /* ── The love funds ─────────────────────────────────────────────────────── */
@@ -183,15 +184,15 @@ export const wedding = {
   ] as Fund[],
 
   /* ── Their story ────────────────────────────────────────────────────────── */
-  // TODO(couple): every word below is placeholder. Replace with the real story —
-  // where you met, how he asked, what you are looking forward to. Keep it short;
-  // three or four sentences each reads best on a phone.
+  // TODO(couple): the first entry is the real story. The three after it are still
+  // placeholder — replace them with how he asked and what you are looking forward
+  // to. Keep it short; three or four sentences each reads best on a phone.
   story: [
     {
       id: "met",
       title: "How we met",
-      when: "The beginning",
-      body: "Some meetings feel ordinary until you look back at them. Ours was one of those — an unremarkable day that turned out to be the first page of everything after it.",
+      when: "At his brother's introduction",
+      body: "We met at the introduction ceremony of Opeyemi's elder brother — a hall full of family, two people who had come only to celebrate somebody else. Neither of us was looking. God had already made the arrangement, and one conversation that afternoon turned out to be the first page of everything after it.",
     },
     {
       id: "grew",
@@ -219,26 +220,38 @@ export const wedding = {
     {
       src: "/gallery/03-portrait.jpeg",
       alt: "Ayomide resting her hand on Opeyemi's shoulder against a warm bronze backdrop",
+      width: 1067,
+      height: 1600,
     },
     {
       src: "/gallery/01-together.jpeg",
       alt: "Opeyemi in a deep green double-breasted suit with Ayomide leaning against his shoulder",
+      width: 1200,
+      height: 1600,
     },
     {
       src: "/gallery/02-hand-in-hand.jpeg",
       alt: "Ayomide and Opeyemi standing hand in hand, she in an ivory dress holding calla lilies",
+      width: 1108,
+      height: 1600,
     },
     {
       src: "/gallery/05-seated.jpeg",
       alt: "The couple seated side by side, Ayomide holding her bouquet of calla lilies",
+      width: 1067,
+      height: 1600,
     },
     {
       src: "/gallery/06-chair.jpeg",
       alt: "Ayomide seated in a wooden chair with her bouquet, Opeyemi standing behind her",
+      width: 1200,
+      height: 1600,
     },
     {
       src: "/gallery/04-shoulder.jpeg",
       alt: "A close portrait of Ayomide in a birdcage veil leaning on Opeyemi's shoulder",
+      width: 1200,
+      height: 1600,
     },
   ] as GalleryImage[],
 
@@ -250,7 +263,7 @@ export const wedding = {
     },
     {
       q: "What should I wear?",
-      a: "The colours of the day are blush pink and champagne. Wear them if you can — and if not, simply come dressed for a joyful celebration.",
+      a: "The colours of the day are blush pink and champagne gold. Wear them if you can — and if not, simply come dressed for a joyful celebration.",
     },
     {
       q: "What does “monetize all gifts” mean?",

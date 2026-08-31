@@ -15,6 +15,7 @@ pnpm dev             # http://localhost:3000
 pnpm build           # production build
 pnpm typecheck       # types only
 pnpm start -p 3100   # serve the production build
+pnpm images          # re-prepare the photographs (see below)
 ```
 
 > **Two notes on this folder's name.**
@@ -54,6 +55,22 @@ The site works today with all of these unset. The gift sheet shows a
 "details coming soon" notice with the RSVP numbers instead of broken
 placeholders, and the RSVP form tells guests to call rather than pretending a
 submission was saved.
+
+## The photographs
+
+The originals live untouched in [images/](images/). `pnpm images` writes the web
+copies into `public/`: it trims the white matting that three of the originals
+were exported with (one also carries a stray gold rule down its left edge),
+then downscales to 1600px on the long edge — 28 MB of source becomes 1.2 MB.
+
+It prints each file's final width and height. Those numbers go into the
+`gallery` entries in `data/wedding.ts`, because trimming leaves the photographs
+with slightly different aspect ratios and the grid needs the real values to
+reserve space without a layout shift.
+
+> **If you re-run it and the site still shows the old picture:** Next caches
+> optimised images by URL, and the filename has not changed. Delete
+> `.next/cache/images` and restart.
 
 ## How it is put together
 

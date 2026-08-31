@@ -46,23 +46,26 @@ export default function Gallery() {
       <div className="shell">
         <SectionHeading eyebrow="Before the day" title="Photographs" />
 
-        <div className="mt-14 columns-2 gap-4 lg:columns-3 [&>*]:mb-4">
+        {/* A uniform 3:4 grid rather than masonry. The photographs no longer
+            share one aspect ratio once their matting was trimmed, and a ragged
+            masonry bottom read as misalignment. Thumbnails crop; the lightbox
+            shows each photograph whole. */}
+        <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
           {images.map((image, i) => (
-            <Bloom key={image.src} order={i % 3} className="break-inside-avoid">
+            <Bloom key={image.src} order={i % 3}>
               <button
                 type="button"
                 onClick={() => setIndex(i)}
-                className="group relative block w-full overflow-hidden rounded-xl bg-blush-50"
+                className="group relative block aspect-3/4 w-full overflow-hidden rounded-xl bg-blush-50"
                 aria-label={`View photograph: ${image.alt}`}
               >
                 <Image
                   src={image.src}
                   alt={image.alt}
-                  width={900}
-                  height={1200}
+                  fill
                   loading="lazy"
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 30vw"
-                  className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                  className="object-cover object-[50%_28%] transition-transform duration-500 group-hover:scale-[1.03]"
                 />
                 <span
                   aria-hidden="true"
@@ -139,8 +142,8 @@ export default function Gallery() {
               <Image
                 src={images[index].src}
                 alt={images[index].alt}
-                width={1400}
-                height={1867}
+                width={images[index].width}
+                height={images[index].height}
                 sizes="90vw"
                 className="max-h-[86dvh] w-auto rounded-lg object-contain"
                 priority

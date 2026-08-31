@@ -15,7 +15,7 @@ exactly `RSVPs`, and put these headers in row 1:
 
 | A | B | C | D | E | F | G |
 |---|---|---|---|---|---|---|
-| Submitted at | Name | Phone | Email | Attending | Adults | Message |
+| Submitted at | Name | Phone | Email | Attending | Message | Requested card |
 
 The column order matters — it must match the `appendRow` call below.
 
@@ -35,8 +35,8 @@ function doPost(e) {
       data.phone || '',
       data.email || '',
       data.attending || '',
-      data.adults || '',
-      data.message || ''
+      data.message || '',
+      data.requestedCard ? 'Yes' : ''
     ]);
 
     return ContentService

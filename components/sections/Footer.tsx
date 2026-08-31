@@ -49,25 +49,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <a
-          href="/invitation.jpeg"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-9 inline-flex items-center gap-2 rounded-full border border-ivory/25 bg-ivory/10 px-7 py-3.5 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-ivory backdrop-blur-sm transition-colors hover:bg-ivory/20"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path
-              d="M7 1v9M3.5 6.5L7 10l3.5-3.5M1.5 12.5h11"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          View the invitation
-        </a>
-
-        <p className="mt-12 text-[13px] leading-relaxed text-ivory/50">
+        <p className="mt-14 text-[13px] leading-relaxed text-ivory/50">
           Made with love, for a day we have all been waiting for.
         </p>
       </Bloom>

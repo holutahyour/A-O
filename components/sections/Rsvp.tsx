@@ -1,12 +1,20 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useRef, useState, type FormEvent } from "react"
+import Image from "next/image"
 import { wedding } from "@/data/wedding"
 import Bloom from "@/components/motion/Bloom"
 import Ornament from "@/components/motion/Ornament"
 import SectionHeading from "@/components/ui/SectionHeading"
 
 type Attending = "Both" | "Ceremony" | "Reception" | "Unable"
+
+/**
+ * Two things a guest can want from this one form: to be counted, or to be
+ * counted *and* handed the invitation card. Both send the same details — only
+ * what happens afterwards differs.
+ */
+type Intent = "rsvp" | "access"
 
 type Errors = Partial<Record<"name" | "phone" | "email", string>>
 
@@ -26,11 +34,25 @@ export default function Rsvp() {
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
   const [attending, setAttending] = useState<Attending>("Both")
-  const [adults, setAdults] = useState("1")
   const [message, setMessage] = useState("")
 
   const [errors, setErrors] = useState<Errors>({})
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle")
+
+  /**
+   * Which button was pressed. The ref is what the submit handler reads — a
+   * click and a submit are two separate events, so a state value set in the
+   * click would still be the old one inside this render's handler. The state
+   * copy exists only so the pressed button can show "Sending…" on itself.
+   */
+  const intentRef = useRef<Intent>("rsvp")
+  const [pressed, setPressed] = useState<Intent>("rsvp")
+  const [granted, setGranted] = useState(false)
+
+  function choose(intent: Intent) {
+    intentRef.current = intent
+    setPressed(intent)
+  }
 
   function validate(): Errors {
     const next: Errors = {}
@@ -49,6 +71,7 @@ export default function Rsvp() {
     setErrors(found)
     if (Object.keys(found).length > 0) return
 
+    const intent = intentRef.current
     setStatus("sending")
     try {
       const response = await fetch("/api/rsvp", {
@@ -59,12 +82,14 @@ export default function Rsvp() {
           phone: phone.trim(),
           email: email.trim(),
           attending,
-          adults: Number(adults),
           message: message.trim(),
+          requestedCard: intent === "access",
         }),
       })
       const data = await response.json().catch(() => ({ ok: false }))
-      setStatus(response.ok && data.ok ? "sent" : "failed")
+      const ok = response.ok && data.ok
+      setGranted(ok && intent === "access")
+      setStatus(ok ? "sent" : "failed")
     } catch {
       setStatus("failed")
     }
@@ -86,6 +111,49 @@ export default function Rsvp() {
               <span className="whitespace-nowrap">26 September</span>.
             </p>
           </Bloom>
+
+          {granted && (
+            <Bloom order={1}>
+              <p className="eyebrow mt-14">Your invitation</p>
+              <a
+                href="/invitation.jpeg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 block overflow-hidden rounded-xl border border-blush-200 bg-ivory shadow-[0_18px_40px_-24px_rgba(107,18,34,0.35)] transition-colors hover:border-gold/50"
+              >
+                <Image
+                  src="/invitation.jpeg"
+                  alt={`The invitation card to the wedding of ${wedding.couple.bride} and ${wedding.couple.groom}`}
+                  width={874}
+                  height={1240}
+                  sizes="(max-width: 640px) 88vw, 420px"
+                  className="h-auto w-full"
+                  priority
+                />
+              </a>
+
+              <a
+                href="/invitation.jpeg"
+                download
+                className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold/60 px-7 py-3.5 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-wine transition-colors hover:border-gold hover:bg-champagne/30"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path
+                    d="M7 1v9M3.5 6.5L7 10l3.5-3.5M1.5 12.5h11"
+                    stroke="currentColor"
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Save the card
+              </a>
+
+              <p className="mt-4 text-[13px] leading-relaxed text-muted">
+                Tap the card to open it full size.
+              </p>
+            </Bloom>
+          )}
         </div>
       </section>
     )
@@ -168,47 +236,26 @@ export default function Rsvp() {
               </div>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="rsvp-attending" className="eyebrow mb-2 block">
-                  Will you join us?
-                </label>
-                <select
-                  id="rsvp-attending"
-                  value={attending}
-                  onChange={(e) => setAttending(e.target.value as Attending)}
-                  className={FIELD}
-                >
-                  {ATTENDING.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="rsvp-adults" className="eyebrow mb-2 block">
-                  Number of adults
-                </label>
-                <select
-                  id="rsvp-adults"
-                  value={adults}
-                  onChange={(e) => setAdults(e.target.value)}
-                  disabled={attending === "Unable"}
-                  aria-describedby="rsvp-adults-note"
-                  className={`${FIELD} disabled:opacity-50`}
-                >
-                  {Array.from({ length: 10 }, (_, i) => String(i + 1)).map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-                <p id="rsvp-adults-note" className="mt-1.5 text-[13px] text-muted">
-                  Adults only — no children, please.
-                </p>
-              </div>
+            <div>
+              <label htmlFor="rsvp-attending" className="eyebrow mb-2 block">
+                Will you join us?
+              </label>
+              <select
+                id="rsvp-attending"
+                value={attending}
+                onChange={(e) => setAttending(e.target.value as Attending)}
+                aria-describedby="rsvp-attending-note"
+                className={FIELD}
+              >
+                {ATTENDING.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+              <p id="rsvp-attending-note" className="mt-1.5 text-[13px] text-muted">
+                Adults only — no children, please.
+              </p>
             </div>
 
             <div>
@@ -250,13 +297,35 @@ export default function Rsvp() {
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="w-full rounded-full bg-wine px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-wine-deep disabled:pointer-events-none disabled:opacity-60"
-            >
-              {status === "sending" ? "Sending…" : "Send RSVP"}
-            </button>
+            {/* One set of details, two intents. Both buttons submit the same
+                form; "Send and request access" additionally hands the guest the
+                invitation card on the thank-you screen. */}
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                type="submit"
+                onClick={() => choose("rsvp")}
+                disabled={status === "sending"}
+                className="w-full rounded-full bg-wine px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-wine-deep disabled:pointer-events-none disabled:opacity-60"
+              >
+                {status === "sending" && pressed === "rsvp" ? "Sending…" : "Send RSVP"}
+              </button>
+
+              <button
+                type="submit"
+                onClick={() => choose("access")}
+                disabled={status === "sending"}
+                className="w-full rounded-full border border-gold/60 px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-wine transition-colors hover:border-gold hover:bg-champagne/30 disabled:pointer-events-none disabled:opacity-60"
+              >
+                {status === "sending" && pressed === "access"
+                  ? "Sending…"
+                  : "Send and request access"}
+              </button>
+            </div>
+
+            <p className="text-center text-[13px] leading-relaxed text-muted">
+              Send and request access — we will pass your details through, then show you the
+              invitation card to keep and share with your household.
+            </p>
           </form>
         </Bloom>
 

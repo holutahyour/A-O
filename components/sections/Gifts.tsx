@@ -28,9 +28,11 @@ export default function Gifts() {
           <GiftCta />
         </Bloom>
 
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Two across on phones: a single-file list of these is an endless scroll,
+            and these cards read fine at half width. */}
+        <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
           {wedding.giftItems.map((item, i) => (
-            <Bloom key={item.id} order={i % 3}>
+            <Bloom key={item.id} order={i % 3} className="h-full">
               <ItemCard item={item} />
             </Bloom>
           ))}
