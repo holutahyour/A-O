@@ -121,7 +121,7 @@ export default async function TheDay() {
             <div className="text-center sm:text-left">
               <p className="eyebrow">Map to the hall</p>
               <p className="mt-2 max-w-xs text-[14px] leading-relaxed text-ink">
-                Point a camera at this code to open the reception venue in Maps — the same
+                Point a camera at this code to open the reception venue in Maps, the same
                 code printed on your invitation card.
               </p>
             </div>

@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion"
 
 /**
- * ——— ✦ ———
+ * --- ✦ ---
  *
  * The one ornament that repeats down the whole page. Two gold hairlines that
  * draw themselves outward from a small four-point star. Using a single

@@ -1,7 +1,7 @@
 import { wedding } from "@/data/wedding"
 
 /**
- * The AO monogram. Appears exactly twice on the page — hero and footer — plus
+ * The AO monogram. Appears exactly twice on the page (hero and footer), plus
  * small in the sticky header. Anything more and it stops being a mark.
  */
 export default function Monogram({

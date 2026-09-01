@@ -19,11 +19,11 @@ import { longDate } from "@/lib/format"
 
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
-export const alt = `${wedding.couple.bride} and ${wedding.couple.groom} — ${longDate(
+export const alt = `${wedding.couple.bride} and ${wedding.couple.groom}, ${longDate(
   wedding.ceremonyAt,
 )}`
 
-/** A small diamond, drawn rather than typed — the serif has no glyph for it. */
+/** A small diamond, drawn rather than typed - the serif has no glyph for it. */
 function Diamond() {
   return (
     <div

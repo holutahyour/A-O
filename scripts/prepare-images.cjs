@@ -63,7 +63,7 @@ async function contentBox(input) {
   const colHasContent = new Array(width).fill(false)
   const rowHasContent = new Array(height).fill(false)
 
-  // A row or column counts as picture if a real share of it is not white —
+  // A row or column counts as picture if a real share of it is not white -
   // a single dark pixel should not rescue a white margin.
   const colDark = new Array(width).fill(0)
   const rowDark = new Array(height).fill(0)

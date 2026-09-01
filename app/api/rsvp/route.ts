@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 
   if (!endpoint) {
     // No Sheet wired up yet. Fail honestly and loudly rather than pretending
-    // the RSVP was recorded — the guest is then told to call instead.
+    // the RSVP was recorded - the guest is then told to call instead.
     console.error("[rsvp] RSVP_ENDPOINT is not set; submission was not recorded.")
     return NextResponse.json(
       { ok: false, error: "RSVP is not connected yet." },

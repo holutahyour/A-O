@@ -3,7 +3,7 @@
  *  THE ONLY FILE YOU NEED TO EDIT
  * ─────────────────────────────────────────────────────────────────────────────
  *  Everything the website says lives here. Change a bank account number, add a
- *  gift, reword an answer — all of it happens in this file. You should never
+ *  gift, reword an answer - all of it happens in this file. You should never
  *  need to open a component.
  *
  *  Anything marked TODO still needs real information from the couple.
@@ -39,7 +39,7 @@ export type GalleryImage = {
   /**
    * Real pixel dimensions. Three of these photographs were exported with white
    * matting that had to be trimmed off, so they no longer share one aspect
-   * ratio — the grid needs the true numbers to reserve the right space and
+   * ratio - the grid needs the true numbers to reserve the right space and
    * avoid a layout shift.
    *
    * If you replace a photo: drop the original in images/, point this entry at
@@ -80,7 +80,7 @@ export const wedding = {
   ceremonyAt: "2026-09-26T11:00:00.000Z",
 
   /* ── The families, exactly as printed on the invitation ─────────────────── */
-  // Not shown on the site any more — the invitation now opens in the couple's
+  // Not shown on the site any more - the invitation now opens in the couple's
   // own voice. Kept here so the wording is not lost if you want it back.
   families: {
     bride: "Evang. Olatunji and Late Mrs Abosede Israel Eweje",
@@ -116,6 +116,15 @@ export const wedding = {
     { display: "+234 906 665 5494", tel: "+2349066655494" },
   ],
 
+  /**
+   * The line invitation requests are sent to on WhatsApp. Digits only,
+   * country code first and no plus sign, exactly as wa.me expects.
+   */
+  whatsapp: {
+    number: "2347030642133",
+    display: "+234 703 064 2133",
+  },
+
   /* ── Colour of the day, straight off the card ───────────────────────────── */
   colours: [
     { name: "Blush Pink", hex: "#F2A6AC" },
@@ -130,14 +139,14 @@ export const wedding = {
 
     /**
      * Optional second account for guests sending from abroad.
-     * Leave as null and the whole block is hidden — it is never half-rendered.
+     * Leave as null and the whole block is hidden - it is never half-rendered.
      */
     international: null as InternationalAccount | null,
   },
 
   /* ── The gift table ─────────────────────────────────────────────────────── */
   // No prices: the couple ask for cash, and guests give what is on their heart.
-  // Edit freely — rename, remove, add your own. Set `imageUrl` to a photo in
+  // Edit freely - rename, remove, add your own. Set `imageUrl` to a photo in
   // /public to replace the ornamental tile.
   giftItems: [
     { id: "refrigerator", name: "Refrigerator", category: "Kitchen" },
@@ -185,14 +194,14 @@ export const wedding = {
 
   /* ── Their story ────────────────────────────────────────────────────────── */
   // TODO(couple): the first entry is the real story. The three after it are still
-  // placeholder — replace them with how he asked and what you are looking forward
+  // placeholder - replace them with how he asked and what you are looking forward
   // to. Keep it short; three or four sentences each reads best on a phone.
   story: [
     {
       id: "met",
       title: "How we met",
       when: "At his brother's introduction",
-      body: "We met at the introduction ceremony of Opeyemi's elder brother — a hall full of family, two people who had come only to celebrate somebody else. Neither of us was looking. God had already made the arrangement, and one conversation that afternoon turned out to be the first page of everything after it.",
+      body: "We met at the introduction ceremony of Opeyemi's elder brother: a hall full of family, two people who had come only to celebrate somebody else. Neither of us was looking. God had already made the arrangement, and one conversation that afternoon turned out to be the first page of everything after it.",
     },
     {
       id: "grew",
@@ -210,7 +219,7 @@ export const wedding = {
       id: "forever",
       title: "And now, forever",
       when: "26 September 2026",
-      body: "We are stepping into a home built on grace, patience, and joy — and we would love for you to stand with us as we begin.",
+      body: "We are stepping into a home built on grace, patience, and joy. We would love for you to stand with us as we begin.",
     },
   ] as StoryEntry[],
 
@@ -263,7 +272,7 @@ export const wedding = {
     },
     {
       q: "What should I wear?",
-      a: "The colours of the day are blush pink and champagne gold. Wear them if you can — and if not, simply come dressed for a joyful celebration.",
+      a: "The colours of the day are blush pink and champagne gold. Wear them if you can, and if not, simply come dressed for a joyful celebration.",
     },
     {
       q: "What does “monetize all gifts” mean?",

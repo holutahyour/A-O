@@ -16,7 +16,7 @@ const UNITS = [
 
 export default function Countdown() {
   // Both server and client compute this from the same fixed UTC instant, so
-  // the markup matches apart from the seconds digit — hence the
+  // the markup matches apart from the seconds digit - hence the
   // suppressHydrationWarning on the numerals below.
   const [left, setLeft] = useState<Remaining>(() => remainingUntil(wedding.ceremonyAt))
 

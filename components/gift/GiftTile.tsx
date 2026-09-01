@@ -3,8 +3,8 @@ import type { GiftCategory } from "@/data/wedding"
 /**
  * The stand-in for a product photo.
  *
- * Rather than stock photographs of appliances — which would look bought-in and
- * date badly — each gift gets a line-drawn tile in the wedding's own palette.
+ * Rather than stock photographs of appliances, which would look bought-in and
+ * date badly, each gift gets a line-drawn tile in the wedding's own palette.
  * When the couple add a real photo to an item, that photo is used instead.
  */
 

@@ -4,7 +4,7 @@ import type { Fund } from "@/data/wedding"
 import { useGiftSheet } from "./GiftSheet"
 
 /**
- * Deliberately unlike the item cards — wider, no photo, an ornament instead —
+ * Deliberately unlike the item cards (wider, no photo, an ornament instead)
  * so the two ideas never blur into one grid of the same thing.
  */
 export default function FundCard({ fund }: { fund: Fund }) {

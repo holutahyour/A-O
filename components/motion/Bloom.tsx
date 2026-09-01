@@ -4,15 +4,15 @@ import { motion, useReducedMotion } from "framer-motion"
 import type { ReactNode } from "react"
 
 /**
- * The section reveal: content washes into view the way ink blooms on wet paper
- * — a soft lift paired with a fade, once, when it first scrolls in.
+ * The section reveal: content washes into view the way ink blooms on wet paper:
+ * a soft lift paired with a fade, once, when it first scrolls in.
  *
  * Under prefers-reduced-motion this collapses to a plain fade with no movement.
  */
 
 type Props = {
   children: ReactNode
-  /** Stagger position — each step adds 90ms. */
+  /** Stagger position - each step adds 90ms. */
   order?: number
   className?: string
   as?: "div" | "section" | "li" | "article" | "header" | "footer"

@@ -17,7 +17,7 @@ import CopyRow from "./CopyRow"
 import Ornament from "@/components/motion/Ornament"
 
 /**
- * The transfer sheet — the most important component on the site.
+ * The transfer sheet - the most important component on the site.
  *
  * The whole gift flow is built around one question: how few taps until the
  * money has actually moved? The answer is two. Tap a gift, tap copy on the
@@ -64,7 +64,7 @@ export function GiftSheetProvider({ children }: { children: ReactNode }) {
 
   const isOpen = target !== null
 
-  /* Scroll lock, focus move, focus trap, and Escape — all while open. */
+  /* Scroll lock, focus move, focus trap, and Escape - all while open. */
   useEffect(() => {
     if (!isOpen) return
 

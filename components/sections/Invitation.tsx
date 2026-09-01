@@ -3,7 +3,7 @@ import Bloom from "@/components/motion/Bloom"
 import Ornament from "@/components/motion/Ornament"
 
 /**
- * The centrepiece. The couple speak in their own voice here — the invitation
+ * The centrepiece. The couple speak in their own voice here - the invitation
  * opens on the invitation itself, and the names are the only thing between it
  * and the scripture.
  */

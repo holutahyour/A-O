@@ -11,7 +11,7 @@ import GiftCta from "@/components/gift/GiftCta"
  * The printed card says "MONETIZE ALL GIFTS". Guests will not all know what
  * that means, and the ones who do will be acting on it one-handed, on a phone,
  * possibly at the reception itself. So the section opens by explaining *why*
- * cash — the thing guests quietly wonder about and nobody usually answers —
+ * cash, the thing guests quietly wonder about and nobody usually answers,
  * and then gets out of the way in two taps.
  */
 export default function Gifts() {
@@ -19,9 +19,9 @@ export default function Gifts() {
     <section id="gifts" className="section wash relative">
       <div className="shell">
         <SectionHeading
-          eyebrow="Monetize all gifts"
+          eyebrow="Monetize gifts"
           title="The Gift Table"
-          lead="Your presence is the gift. But if you would like to bless their new home, the couple have asked that all gifts be sent as cash — it lets them choose exactly what their home needs."
+          lead="Your presence is the gift. But if you would like to bless their new home, the couple have asked that gifts can be sent as cash, which lets them choose exactly what their home needs."
         />
 
         <Bloom order={1} className="mt-9 flex justify-center">

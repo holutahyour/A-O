@@ -37,7 +37,7 @@ export default function Details() {
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2">
           <Card title="Colour of the day" order={0}>
-            <p>Wear these if you can — and if not, simply come dressed to celebrate.</p>
+            <p>Wear these if you can, and if not, simply come dressed to celebrate.</p>
             <ul className="mt-4 space-y-2.5">
               {wedding.colours.map((c) => (
                 <li key={c.name} className="flex items-center gap-3">
@@ -57,7 +57,7 @@ export default function Details() {
           <Card title="Adults only" order={1}>
             <p>
               We love your little ones dearly, but this celebration is for adults only. No
-              kids, please — thank you for making arrangements ahead of the day.
+              kids, please. Thank you for making arrangements ahead of the day.
             </p>
           </Card>
 
@@ -76,7 +76,7 @@ export default function Details() {
 
           <Card title="Getting there" order={3}>
             <p>
-              Both venues are by College Bus stop in Ifako-Ijaiye — a landmark every local
+              Both venues are by College Bus stop in Ifako-Ijaiye, a landmark every local
               driver knows. Parking is available at the reception hall, and the walk between
               the two is short.
             </p>

@@ -75,7 +75,7 @@ export default function Hero() {
             Ifako-Ijaiye, Lagos
           </motion.p>
 
-          {/* Blush is an accent, never a text colour — it fails contrast on
+          {/* Blush is an accent, never a text colour - it fails contrast on
               ivory. The hashtag is information, so it gets wine. */}
           <motion.p {...rise(5)} className="eyebrow mt-3 text-wine/75">
             {wedding.couple.hashtag}

@@ -1,6 +1,6 @@
 /**
  * Formatting helpers. Amounts are stored as integer naira everywhere and are
- * only turned into text at the render boundary — never earlier.
+ * only turned into text at the render boundary - never earlier.
  */
 
 const LAGOS = "Africa/Lagos"
@@ -18,7 +18,7 @@ export function naira(amount: number): string {
 
 /**
  * The wedding date, written out in full, in Lagos time.
- * The weekday is derived rather than typed by hand — nobody should be
+ * The weekday is derived rather than typed by hand - nobody should be
  * hardcoding "Saturday" and hoping.
  */
 export function longDate(iso: string): string {
@@ -31,7 +31,7 @@ export function longDate(iso: string): string {
   }).format(new Date(iso))
 }
 
-/** "26 September 2026" — the same date without the weekday. */
+/** "26 September 2026" - the same date without the weekday. */
 export function shortDate(iso: string): string {
   return new Intl.DateTimeFormat("en-GB", {
     timeZone: LAGOS,
@@ -41,7 +41,7 @@ export function shortDate(iso: string): string {
   }).format(new Date(iso))
 }
 
-/** "26 · 09 · 2026" — the hero's typographic treatment of the date. */
+/** "26 · 09 · 2026" - the hero's typographic treatment of the date. */
 export function dottedDate(iso: string): string {
   const parts = new Intl.DateTimeFormat("en-GB", {
     timeZone: LAGOS,

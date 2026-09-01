@@ -7,7 +7,7 @@ import Bokeh from "@/components/motion/Bokeh"
 import Header from "@/components/sections/Header"
 import "./globals.css"
 
-/* Display and headings. Deliberately not Playfair — that belongs to the
+/* Display and headings. Deliberately not Playfair - that belongs to the
    invitation this site took inspiration from. */
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],

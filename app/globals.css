@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ───────────────────────────────────────────────────────────────────────────
-   Design tokens — Blush & Champagne
+   Design tokens - Blush & Champagne
    Taken from the printed invitation card, not invented.
    ─────────────────────────────────────────────────────────────────────────── */
 @theme {
@@ -111,7 +111,7 @@
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   Motion — bokeh and bloom.
+   Motion - bokeh and bloom.
    Deliberately NOT falling petals: that is the reference site's signature.
    ─────────────────────────────────────────────────────────────────────────── */
 @keyframes bokehDrift {
@@ -152,7 +152,7 @@
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   Reduced motion — a hard requirement, not a nicety.
+   Reduced motion - a hard requirement, not a nicety.
    Bokeh disappears entirely; everything else settles instantly.
    ─────────────────────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

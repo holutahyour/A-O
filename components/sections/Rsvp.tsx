@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef, useState, type FormEvent } from "react"
-import Image from "next/image"
 import { wedding } from "@/data/wedding"
 import Bloom from "@/components/motion/Bloom"
 import Ornament from "@/components/motion/Ornament"
@@ -11,8 +10,10 @@ type Attending = "Both" | "Ceremony" | "Reception" | "Unable"
 
 /**
  * Two things a guest can want from this one form: to be counted, or to be
- * counted *and* handed the invitation card. Both send the same details — only
- * what happens afterwards differs.
+ * counted *and* handed the invitation card. Both send the same details - only
+ * what happens afterwards differs. "access" hands the guest over to WhatsApp
+ * with the request already written, so the card comes back from the couple
+ * themselves rather than off a public page.
  */
 type Intent = "rsvp" | "access"
 
@@ -29,6 +30,31 @@ const FIELD =
   "w-full rounded-lg border border-blush-200 bg-ivory px-4 py-3 font-ui text-[15px] text-ink " +
   "transition-colors placeholder:text-muted/60 hover:border-gold/50 focus:border-gold"
 
+/**
+ * The chat a guest asking for the card is handed off to, with the message
+ * already written so all they have to do is press send.
+ */
+function whatsappHref(fields: { name: string; phone: string; attending: Attending }) {
+  const label =
+    ATTENDING.find((o) => o.value === fields.attending)?.label ?? fields.attending
+
+  const text = `Hello ${wedding.couple.bride} and ${wedding.couple.groom}, I have just sent my RSVP on your wedding website and I would love a copy of the invitation card.
+
+Name: ${fields.name}
+Phone: ${fields.phone}
+Attending: ${label}`
+
+  return `https://wa.me/${wedding.whatsapp.number}?text=${encodeURIComponent(text)}`
+}
+
+function WhatsAppMark() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413" />
+    </svg>
+  )
+}
+
 export default function Rsvp() {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
@@ -40,14 +66,16 @@ export default function Rsvp() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle")
 
   /**
-   * Which button was pressed. The ref is what the submit handler reads — a
+   * Which button was pressed. The ref is what the submit handler reads - a
    * click and a submit are two separate events, so a state value set in the
    * click would still be the old one inside this render's handler. The state
    * copy exists only so the pressed button can show "Sending…" on itself.
    */
   const intentRef = useRef<Intent>("rsvp")
   const [pressed, setPressed] = useState<Intent>("rsvp")
-  const [granted, setGranted] = useState(false)
+
+  /** Set only when the guest asked for the card, and only once we have saved. */
+  const [waHref, setWaHref] = useState<string | null>(null)
 
   function choose(intent: Intent) {
     intentRef.current = intent
@@ -88,7 +116,23 @@ export default function Rsvp() {
       })
       const data = await response.json().catch(() => ({ ok: false }))
       const ok = response.ok && data.ok
-      setGranted(ok && intent === "access")
+
+      if (ok && intent === "access") {
+        const href = whatsappHref({
+          name: name.trim(),
+          phone: phone.trim(),
+          attending,
+        })
+        setWaHref(href)
+        // Hand the guest straight over to WhatsApp. A browser that has let the
+        // click's user activation lapse while the request was in flight will
+        // block this, which is why the thank-you screen carries the same link
+        // as a button they can press themselves.
+        window.open(href, "_blank", "noopener,noreferrer")
+      } else {
+        setWaHref(null)
+      }
+
       setStatus(ok ? "sent" : "failed")
     } catch {
       setStatus("failed")
@@ -112,45 +156,28 @@ export default function Rsvp() {
             </p>
           </Bloom>
 
-          {granted && (
+          {waHref && (
             <Bloom order={1}>
               <p className="eyebrow mt-14">Your invitation</p>
-              <a
-                href="/invitation.jpeg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 block overflow-hidden rounded-xl border border-blush-200 bg-ivory shadow-[0_18px_40px_-24px_rgba(107,18,34,0.35)] transition-colors hover:border-gold/50"
-              >
-                <Image
-                  src="/invitation.jpeg"
-                  alt={`The invitation card to the wedding of ${wedding.couple.bride} and ${wedding.couple.groom}`}
-                  width={874}
-                  height={1240}
-                  sizes="(max-width: 640px) 88vw, 420px"
-                  className="h-auto w-full"
-                  priority
-                />
-              </a>
+              <p className="mx-auto mt-5 max-w-sm text-[15px] leading-relaxed text-ink">
+                WhatsApp should have opened with your request already written. Send it and
+                we will reply with the invitation card ourselves.
+              </p>
 
               <a
-                href="/invitation.jpeg"
-                download
-                className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold/60 px-7 py-3.5 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-wine transition-colors hover:border-gold hover:bg-champagne/30"
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-wine px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-wine-deep"
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                  <path
-                    d="M7 1v9M3.5 6.5L7 10l3.5-3.5M1.5 12.5h11"
-                    stroke="currentColor"
-                    strokeWidth="1.3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Save the card
+                <WhatsAppMark />
+                Open WhatsApp
               </a>
 
               <p className="mt-4 text-[13px] leading-relaxed text-muted">
-                Tap the card to open it full size.
+                It opens a chat with{" "}
+                <span className="tabular whitespace-nowrap">{wedding.whatsapp.display}</span>
+                . If nothing happened, tap the button above.
               </p>
             </Bloom>
           )}
@@ -254,7 +281,7 @@ export default function Rsvp() {
                 ))}
               </select>
               <p id="rsvp-attending-note" className="mt-1.5 text-[13px] text-muted">
-                Adults only — no children, please.
+                Adults only - no children, please.
               </p>
             </div>
 
@@ -298,8 +325,8 @@ export default function Rsvp() {
             )}
 
             {/* One set of details, two intents. Both buttons submit the same
-                form; "Send and request access" additionally hands the guest the
-                invitation card on the thank-you screen. */}
+                form; "Send and request access" additionally opens WhatsApp so
+                the couple can send the invitation card back personally. */}
             <div className="grid gap-3 sm:grid-cols-2">
               <button
                 type="submit"
@@ -314,17 +341,23 @@ export default function Rsvp() {
                 type="submit"
                 onClick={() => choose("access")}
                 disabled={status === "sending"}
-                className="w-full rounded-full border border-gold/60 px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-wine transition-colors hover:border-gold hover:bg-champagne/30 disabled:pointer-events-none disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2.5 rounded-full border border-gold/60 px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-wine transition-colors hover:border-gold hover:bg-champagne/30 disabled:pointer-events-none disabled:opacity-60"
               >
-                {status === "sending" && pressed === "access"
-                  ? "Sending…"
-                  : "Send and request access"}
+                {status === "sending" && pressed === "access" ? (
+                  "Sending…"
+                ) : (
+                  <>
+                    <WhatsAppMark />
+                    Send and request access
+                  </>
+                )}
               </button>
             </div>
 
             <p className="text-center text-[13px] leading-relaxed text-muted">
-              Send and request access — we will pass your details through, then show you the
-              invitation card to keep and share with your household.
+              Send and request access passes your details through, then opens WhatsApp with
+              your request already written, so we can send you the invitation card
+              ourselves.
             </p>
           </form>
         </Bloom>

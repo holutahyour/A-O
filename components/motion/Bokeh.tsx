@@ -2,13 +2,13 @@
  * Soft, out-of-focus light drifting slowly upward.
  *
  * This is the site's ambient motion signature. It is deliberately NOT falling
- * petals — that belongs to the invitation this site took inspiration from, and
+ * petals - that belongs to the invitation this site took inspiration from, and
  * reusing it would make this read as a copy.
  *
  * The mote positions come from a seeded generator rather than Math.random, so
  * the server and the client agree and React never reports a hydration
  * mismatch. Under prefers-reduced-motion the whole thing vanishes (see
- * globals.css) — no JavaScript needed to switch it off.
+ * globals.css) - no JavaScript needed to switch it off.
  */
 
 const MOTE_COUNT = 20
