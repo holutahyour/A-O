@@ -146,21 +146,24 @@ export const wedding = {
 
   /* ── The gift table ─────────────────────────────────────────────────────── */
   // No prices: the couple ask for cash, and guests give what is on their heart.
-  // Edit freely - rename, remove, add your own. Set `imageUrl` to a photo in
-  // /public to replace the ornamental tile.
+  // Edit freely - rename, remove, add your own. Each photo is a 4:3 card built
+  // by `pnpm images`: drop the original into images/gifts/, add it to GIFTS in
+  // scripts/prepare-images.cjs, then point `imageUrl` at /gifts/<id>.jpeg.
+  // Drop `imageUrl` and the item falls back to the ornamental tile.
   giftItems: [
-    { id: "refrigerator", name: "Refrigerator", category: "Kitchen" },
-    { id: "heavy-duty-blender", name: "Heavy Duty Blender", category: "Kitchen" },
-    { id: "food-processor", name: "Food Processor", category: "Kitchen" },
-    { id: "toaster", name: "Toaster", category: "Kitchen" },
-    { id: "rice-cooker", name: "Rice Cooker", category: "Kitchen" },
-    { id: "juicer", name: "Juicer", category: "Kitchen" },
-    { id: "non-stick-cookware", name: "Set of Non-stick Cookware", category: "Kitchen" },
-    { id: "granite-cookware", name: "Set of Granite Cookware", category: "Kitchen" },
-    { id: "washing-machine", name: "Automatic Washing Machine", category: "Laundry" },
-    { id: "air-conditioner", name: "Air Conditioner", category: "Living" },
-    { id: "smart-tv", name: "Smart Television", category: "Living" },
-    { id: "soundbar", name: "Soundbar", category: "Living" },
+    { id: "refrigerator", name: "Refrigerator", category: "Kitchen", imageUrl: "/gifts/refrigerator.jpeg" },
+    { id: "heavy-duty-blender", name: "Heavy Duty Blender", category: "Kitchen", imageUrl: "/gifts/heavy-duty-blender.jpeg" },
+    { id: "food-processor", name: "Food Processor", category: "Kitchen", imageUrl: "/gifts/food-processor.jpeg" },
+    { id: "toaster", name: "Toaster", category: "Kitchen", imageUrl: "/gifts/toaster.jpeg" },
+    { id: "rice-cooker", name: "Rice Cooker", category: "Kitchen", imageUrl: "/gifts/rice-cooker.jpeg" },
+    { id: "juicer", name: "Juicer", category: "Kitchen", imageUrl: "/gifts/juicer.jpeg" },
+    { id: "non-stick-cookware", name: "Set of Non-stick Cookware", category: "Kitchen", imageUrl: "/gifts/non-stick-cookware.jpeg" },
+    { id: "granite-cookware", name: "Set of Granite Cookware", category: "Kitchen", imageUrl: "/gifts/granite-cookware.jpeg" },
+    { id: "deep-fryer", name: "Deep Fryer", category: "Kitchen", imageUrl: "/gifts/deep-fryer.jpeg" },
+    { id: "washing-machine", name: "Automatic Washing Machine", category: "Laundry", imageUrl: "/gifts/washing-machine.jpeg" },
+    { id: "air-conditioner", name: "Air Conditioner", category: "Living", imageUrl: "/gifts/air-conditioner.jpeg" },
+    { id: "smart-tv", name: "Smart Television", category: "Living", imageUrl: "/gifts/smart-tv.jpeg" },
+    { id: "soundbar", name: "Soundbar", category: "Living", imageUrl: "/gifts/soundbar.jpeg" },
   ] as GiftItem[],
 
   /* ── The love funds ─────────────────────────────────────────────────────── */

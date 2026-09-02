@@ -11,6 +11,12 @@
  * *longest contiguous run* of non-white rows and columns. A stray 3px rule
  * separated from the photograph by white is its own short run and gets dropped.
  *
+ * The gift photographs are a separate problem. They arrive at every shape from
+ * 589x903 to 1170x666, and the gift grid asks for one 4:3 card. Cropping to fit
+ * would slice the top off a refrigerator, so each one is instead *fitted whole*
+ * onto a 4:3 blush canvas - the same blush the ornamental tile used, so the
+ * grid still reads as one set whether a photo is portrait or landscape.
+ *
  * The untouched originals stay in images/. Run with: node ./_images.cjs
  */
 const sharp = require("sharp")
@@ -31,6 +37,29 @@ const TARGETS = [
   { src: "images/IMG_9852.JPG.jpeg", out: "public/gallery/04-shoulder.jpeg" },
   { src: "images/A&O Invitation Card.jpeg", out: "public/invitation.jpeg", noTrim: true },
 ]
+
+/** Gift cards render at ~380px wide, so 800 covers a 2x screen with room spare. */
+const GIFT_WIDTH = 800
+const GIFT_HEIGHT = 600
+/** --color-blush-50. The canvas the photo is fitted onto. */
+const GIFT_BG = { r: 253, g: 241, b: 240 }
+
+/** Keyed by the gift's `id` in data/wedding.ts - the output is /gifts/<id>.jpeg. */
+const GIFTS = {
+  refrigerator: "Refrigerator.jpeg",
+  "heavy-duty-blender": "Heavy duty Blender.jpeg",
+  "food-processor": "Food processor.jpeg",
+  toaster: "Toaster.jpeg",
+  "rice-cooker": "Rice Cooker.jpeg",
+  juicer: "Juicer.jpeg",
+  "non-stick-cookware": "Non stick cookwares.jpeg",
+  "granite-cookware": "Granite cookware.jpeg",
+  "deep-fryer": "Deep Fryer.jpeg",
+  "washing-machine": "Automatic washing machine.jpeg",
+  "air-conditioner": "Air conditioner.jpeg",
+  "smart-tv": "Smart Tv.jpeg",
+  soundbar: "Sound bar.jpeg",
+}
 
 /** Start and length of the longest run of `true` in a boolean array. */
 function longestRun(flags) {
@@ -93,6 +122,41 @@ async function contentBox(input) {
   }
 }
 
+/** Fit each gift photograph whole onto a shared 4:3 blush card. */
+async function gifts() {
+  let before = 0
+  let after = 0
+
+  for (const [id, file] of Object.entries(GIFTS)) {
+    const src = path.join("images/gifts", file)
+    const out = path.join("public/gifts", `${id}.jpeg`)
+    before += fs.statSync(src).size
+
+    const tmp = out + ".tmp"
+    await sharp(src)
+      .resize({
+        width: GIFT_WIDTH,
+        height: GIFT_HEIGHT,
+        fit: "contain",
+        background: GIFT_BG,
+        withoutEnlargement: false,
+      })
+      .flatten({ background: GIFT_BG })
+      .jpeg({ quality: 80, mozjpeg: true })
+      .toFile(tmp)
+    fs.renameSync(tmp, out)
+
+    after += fs.statSync(out).size
+    console.log(
+      `${path.basename(out).padEnd(24)} ${GIFT_WIDTH}x${GIFT_HEIGHT}  ${file}`,
+    )
+  }
+
+  console.log(`
+${(before / 1e6).toFixed(1)}MB -> ${(after / 1e6).toFixed(1)}MB (gifts)
+`)
+}
+
 async function main() {
   const results = []
   let before = 0
@@ -144,9 +208,17 @@ async function main() {
       console.log(`  ${r.out.replace("public", "")}  width: ${r.w}, height: ${r.h}`)
     }
   }
+
+  console.log("")
+  await gifts()
 }
 
-main().catch((e) => {
+// `node ./scripts/prepare-images.cjs gifts` reruns just the gift cards, so
+// adding one photograph does not rewrite every gallery file's bytes.
+const only = process.argv[2]
+const run = only === "gifts" ? gifts : main
+
+run().catch((e) => {
   console.error(e)
   process.exit(1)
 })
