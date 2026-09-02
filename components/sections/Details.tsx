@@ -63,8 +63,8 @@ export default function Details() {
 
           <Card title="Gifts" order={2}>
             <p>
-              All gifts are monetized, which simply means the couple would love to receive
-              cash rather than items. It lets them choose exactly what their new home needs.
+              All gifts can be monetized, which simply means the couple would not fine receiving
+              cash. It lets them choose exactly what their new home needs.
             </p>
             <a
               href="#gifts"
