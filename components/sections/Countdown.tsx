@@ -15,20 +15,25 @@ const UNITS = [
 ] as const
 
 export default function Countdown() {
-  // Both server and client compute this from the same fixed UTC instant, so
-  // the markup matches apart from the seconds digit - hence the
-  // suppressHydrationWarning on the numerals below.
-  const [left, setLeft] = useState<Remaining>(() => remainingUntil(wedding.ceremonyAt))
+  // The page is prerendered, so anything computed during render is frozen at
+  // build time - and React 19 never patches text that differs on hydration,
+  // which left stale day counts on screen. So the server and the first client
+  // render both show placeholders, and the real numbers arrive after mount.
+  const [left, setLeft] = useState<Remaining | null>(null)
 
   useEffect(() => {
-    const id = setInterval(() => setLeft(remainingUntil(wedding.ceremonyAt)), 1000)
+    const tick = () => setLeft(remainingUntil(wedding.ceremonyAt))
+    tick()
+    const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [])
+
+  const state = left?.state ?? "counting"
 
   return (
     <section className="section relative bg-blush-50">
       <div className="shell text-center">
-        {left.state === "counting" && (
+        {state === "counting" && (
           <>
             <Bloom>
               <p className="eyebrow">
@@ -51,11 +56,8 @@ export default function Countdown() {
                       />
                     )}
                     <div className="min-w-[4.2rem] px-1 sm:min-w-[6rem]">
-                      <span
-                        suppressHydrationWarning
-                        className="tabular block font-display text-[clamp(38px,11vw,72px)] font-light leading-none text-wine"
-                      >
-                        {String(left[unit.key]).padStart(2, "0")}
+                      <span className="tabular block font-display text-[clamp(38px,11vw,72px)] font-light leading-none text-wine">
+                        {left ? String(left[unit.key]).padStart(2, "0") : "--"}
                       </span>
                       <span className="eyebrow mt-3 block text-[9px] sm:text-[10px]">
                         {unit.label}
@@ -75,7 +77,7 @@ export default function Countdown() {
           </>
         )}
 
-        {left.state === "today" && (
+        {state === "today" && (
           <Bloom>
             <p className="eyebrow">The day is here</p>
             <p className="mt-4 font-display text-[clamp(40px,10vw,76px)] font-light leading-none text-wine">
@@ -88,7 +90,7 @@ export default function Countdown() {
           </Bloom>
         )}
 
-        {left.state === "past" && (
+        {state === "past" && (
           <Bloom>
             <p className="eyebrow">With every thanks to God</p>
             <p className="mt-4 font-display text-[clamp(34px,8vw,60px)] font-light leading-tight text-wine">
