@@ -2,11 +2,12 @@
 
 import { useRef, useState, type FormEvent } from "react"
 import { wedding } from "@/data/wedding"
+import { dayAndMonth } from "@/lib/format"
 import Bloom from "@/components/motion/Bloom"
 import Ornament from "@/components/motion/Ornament"
 import SectionHeading from "@/components/ui/SectionHeading"
 
-type Attending = "Both" | "Ceremony" | "Reception" | "Unable"
+type Attending = "Attending" | "Unable"
 
 /**
  * Two things a guest can want from this one form: to be counted, or to be
@@ -20,9 +21,7 @@ type Intent = "rsvp" | "access"
 type Errors = Partial<Record<"name" | "phone" | "email", string>>
 
 const ATTENDING: { value: Attending; label: string }[] = [
-  { value: "Both", label: "Ceremony & Reception" },
-  { value: "Ceremony", label: "Ceremony only" },
-  { value: "Reception", label: "Reception only" },
+  { value: "Attending", label: "Joyfully attending" },
   { value: "Unable", label: "Unable to attend" },
 ]
 
@@ -38,7 +37,7 @@ function whatsappHref(fields: { name: string; phone: string; attending: Attendin
   const label =
     ATTENDING.find((o) => o.value === fields.attending)?.label ?? fields.attending
 
-  const text = `Hello ${wedding.couple.bride} and ${wedding.couple.groom}, I have just sent my RSVP on your wedding website and I would love a copy of the invitation card.
+  const text = `Hello, I have just sent my RSVP on ${wedding.couple.first} and ${wedding.couple.second}'s website and I would love a copy of the invitation card.
 
 Name: ${fields.name}
 Phone: ${fields.phone}
@@ -59,7 +58,7 @@ export default function Rsvp() {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
-  const [attending, setAttending] = useState<Attending>("Both")
+  const [attending, setAttending] = useState<Attending>("Attending")
   const [message, setMessage] = useState("")
 
   const [errors, setErrors] = useState<Errors>({})
@@ -150,9 +149,9 @@ export default function Rsvp() {
             </h2>
             <Ornament width={44} className="mt-6" />
             <p className="mt-6 text-[16px] leading-relaxed text-ink">
-              Thank you, {name.split(" ")[0]}. Ayomide and Opeyemi cannot wait to celebrate
-              with you on {""}
-              <span className="whitespace-nowrap">26 September</span>.
+              Thank you, {name.split(" ")[0]}. {wedding.couple.first} and{" "}
+              {wedding.couple.second} cannot wait to celebrate with you on{" "}
+              <span className="whitespace-nowrap">{dayAndMonth(wedding.ceremonyAt)}</span>.
             </p>
           </Bloom>
 
@@ -281,7 +280,7 @@ export default function Rsvp() {
                 ))}
               </select>
               <p id="rsvp-attending-note" className="mt-1.5 text-[13px] text-muted">
-                Adults only - no children, please.
+                Children are not allowed. Thank you for understanding.
               </p>
             </div>
 

@@ -5,7 +5,8 @@ import Story from "@/components/sections/Story"
 import TheDay from "@/components/sections/TheDay"
 import Details from "@/components/sections/Details"
 import Gallery from "@/components/sections/Gallery"
-import Gifts from "@/components/sections/Gifts"
+import Stay from "@/components/sections/Stay"
+import Bless from "@/components/sections/Bless"
 import Rsvp from "@/components/sections/Rsvp"
 import Faq from "@/components/sections/Faq"
 import Footer from "@/components/sections/Footer"
@@ -20,7 +21,8 @@ export default function Page() {
       <TheDay />
       <Details />
       <Gallery />
-      <Gifts />
+      <Stay />
+      <Bless />
       <Rsvp />
       <Faq />
       <Footer />

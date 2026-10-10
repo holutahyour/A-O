@@ -1,9 +1,13 @@
-# Ayomide & Opeyemi
+# Oluwabunmi & Anuoluwapo
 
-The wedding website for Ayomide and Opeyemi — Saturday, 26 September 2026,
-The City of the Lord Church, Ifako-Ijaiye, Lagos.
+The website for the engagement ceremony of Oluwabunmi Adedayo and Anuoluwapo
+Akintoye — Saturday, 5 December 2026, 12 noon, Luxury Party Event Centre,
+M.K.O Abiola Gardens Road, Ikeja, Lagos.
 
-`#AYOYEMIALWAYS&4VER`
+> **The previous site built in this repository** (Ayomide & Opeyemi, 26 September
+> 2026) is archived, whole, on the branch `archive/ayomide-opeyemi` and the tag
+> `archive-ayomide-opeyemi-2026-09-26`. `git checkout archive/ayomide-opeyemi`
+> brings back every file of it, photographs included.
 
 ## Running it
 
@@ -15,7 +19,7 @@ pnpm dev             # http://localhost:3000
 pnpm build           # production build
 pnpm typecheck       # types only
 pnpm start -p 3100   # serve the production build
-pnpm images          # re-prepare the photographs (see below)
+pnpm images          # prepare the photographs (see below)
 ```
 
 > **Two notes on this folder's name.**
@@ -38,35 +42,45 @@ pnpm images          # re-prepare the photographs (see below)
 ## Editing the content
 
 **Everything the site says lives in [`data/wedding.ts`](data/wedding.ts).** Names,
-dates, venues, phone numbers, bank details, the gift list, the funds, the story,
-and the FAQ. You should never need to open a component to change a word.
+date, venue, phone numbers, bank details, the story, the hotels, and the FAQ.
+You should never need to open a component to change a word.
 
 Anything still marked `TODO(couple)` needs real information:
 
 | What | Where |
 |---|---|
 | Bank account name, bank, and number | `bank` |
-| The real love story | `story` |
-| Final gift list and prices | `giftItems` |
-| Exact map pins from the card's QR code | `venues.*.mapsUrl` |
+| The couple's portrait and photographs | `portrait`, `gallery` |
+| Exact Google Maps pin for the hall | `venue.mapsUrl` |
+| Confirm the WhatsApp number | `whatsapp` |
+| Confirm the hotel list, and any reserved rooms | `hotels` |
+| A hashtag, if there is one | `couple.hashtag` |
 | Google Apps Script URL for RSVP | `.env.local` — see [docs/APPS-SCRIPT.md](docs/APPS-SCRIPT.md) |
 
-The site works today with all of these unset. The gift sheet shows a
-"details coming soon" notice with the RSVP numbers instead of broken
+The site works today with all of these unset. The "bless the couple" sheet shows
+a "details coming soon" notice with the RSVP numbers instead of broken
 placeholders, and the RSVP form tells guests to call rather than pretending a
 submission was saved.
 
+> **RSVPs need their own sheet.** `RSVP_ENDPOINT` in `.env.local` (and on the
+> host) must point at a Google Sheet made for this couple. If it still holds the
+> previous site's URL, these guests land in the previous couple's sheet.
+
 ## The photographs
 
-The originals live untouched in [images/](images/). `pnpm images` writes the web
-copies into `public/`: it trims the white matting that three of the originals
-were exported with (one also carries a stray gold rule down its left edge),
-then downscales to 1600px on the long edge — 28 MB of source becomes 1.2 MB.
+They have not arrived yet, and the site is built so that nobody can tell:
 
-It prints each file's final width and height. Those numbers go into the
-`gallery` entries in `data/wedding.ts`, because trimming leaves the photographs
-with slightly different aspect ratios and the grid needs the real values to
-reserve space without a layout shift.
+- **The hero arch** holds the card's flowers, opening one by one around the
+  date on a deep plum ground ([components/ui/ArchBloom.tsx](components/ui/ArchBloom.tsx)).
+  Set `portrait` in `data/wedding.ts` and the arch shows the photograph instead.
+- **The gallery** is hidden while `gallery` is empty, and appears between the
+  details and the hotels as soon as it has entries.
+
+When they do arrive, drop the originals in [images/](images/), list them in
+`TARGETS` in [scripts/prepare-images.cjs](scripts/prepare-images.cjs), and run
+`pnpm images`. It trims any white matting, downscales to 1600px on the long
+edge, and prints each file's final width and height — those numbers go into the
+`gallery` entries.
 
 > **If you re-run it and the site still shows the old picture:** Next caches
 > optimised images by URL, and the filename has not changed. Delete
@@ -75,20 +89,26 @@ reserve space without a layout shift.
 ## How it is put together
 
 - **Next.js 16** (App Router) + TypeScript + Tailwind 4 + Framer Motion
-- **No database, no payment processor, no accounts.** Gifts are bank transfers
-  with one-tap copy. RSVPs go to a Google Sheet through `/api/rsvp`.
+- **No database, no payment processor, no accounts.** Blessing the couple is a
+  bank transfer with one-tap copy. RSVPs go to a Google Sheet through
+  `/api/rsvp`.
 - **`app/opengraph-image.tsx`** draws the WhatsApp link preview at 1200×630. This
   link will be shared on WhatsApp far more than anywhere else, so the preview
-  card is drawn properly rather than letting a portrait photo get cropped.
+  card is drawn properly rather than left to a chat client's cropping.
 
 ## The design
 
-Blush and champagne, taken from the printed invitation card — warm ivory ground,
-deep wine headings, champagne-gold hairlines. The ambient motion is drifting
-bokeh with watercolour "bloom" reveals, and the type is Cormorant Garamond with
-Italianno for a handful of script flourishes.
+Onion pink and lilac, taken from the printed invitation card
+([images/O&A Invitation Card.jpg](images/O%26A%20Invitation%20Card.jpg)) — a
+pink-white ground, deep plum headings, orchid hairlines. The ambient motion is
+drifting bokeh with watercolour "bloom" reveals, and the type is Gilda Display
+for the names and headings, Italianno for a handful of script flourishes, and
+Jost for everything functional. Gilda has no italic, so the few italic lines
+borrow Cormorant Garamond's.
 
-The full brief is in [docs/BUILD-PROMPT.md](docs/BUILD-PROMPT.md).
+The colour tokens in `app/globals.css` keep the role names of the first build
+(`blush`, `champagne`, `gold`, `wine`); the comment at the top of that file says
+what each one is now.
 
 ## Deploying
 
@@ -98,7 +118,7 @@ Push to Vercel. It detects pnpm from `pnpm-lock.yaml` and from the
 
 Set two environment variables:
 
-- `RSVP_ENDPOINT` — the Apps Script web app URL
+- `RSVP_ENDPOINT` — the Apps Script web app URL for this couple's sheet
 - `NEXT_PUBLIC_SITE_URL` — the final public URL, so link previews resolve
 
 ## Licences

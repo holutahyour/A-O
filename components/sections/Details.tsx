@@ -37,7 +37,7 @@ export default function Details() {
 
         <div className="mt-14 grid gap-5 sm:grid-cols-2">
           <Card title="Colour of the day" order={0}>
-            <p>Wear these if you can, and if not, simply come dressed to celebrate.</p>
+            <p>Wear it if you can, and if not, simply come dressed to celebrate.</p>
             <ul className="mt-4 space-y-2.5">
               {wedding.colours.map((c) => (
                 <li key={c.name} className="flex items-center gap-3">
@@ -56,30 +56,30 @@ export default function Details() {
 
           <Card title="Adults only" order={1}>
             <p>
-              We love your little ones dearly, but this celebration is for adults only. No
-              kids, please. Thank you for making arrangements ahead of the day.
+              We love your little ones dearly, but children are not allowed at this
+              celebration. Thank you for understanding, and for making arrangements ahead of
+              the day.
             </p>
           </Card>
 
-          <Card title="Gifts" order={2}>
+          <Card title="Getting there" order={2}>
             <p>
-              All gifts can be monetized, which simply means the couple would not fine receiving
-              cash. It lets them choose exactly what their new home needs.
+              {wedding.venue.name} is on M.K.O Abiola Gardens Road in Ikeja, beside Adonai
+              Court. Give your driver that landmark, or open the map from the section above.
+            </p>
+          </Card>
+
+          <Card title="Staying over" order={3}>
+            <p>
+              Travelling in for the day? There are good hotels a short drive from the hall,
+              and we have gathered a few for you.
             </p>
             <a
-              href="#gifts"
+              href="#stay"
               className="mt-3 inline-block py-3 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-wine underline decoration-gold/50 underline-offset-4 transition-colors hover:decoration-gold"
             >
-              Go to the gift table
+              See where to stay
             </a>
-          </Card>
-
-          <Card title="Getting there" order={3}>
-            <p>
-              Both venues are by College Bus stop in Ifako-Ijaiye, a landmark every local
-              driver knows. Parking is available at the reception hall, and the walk between
-              the two is short.
-            </p>
           </Card>
         </div>
       </div>

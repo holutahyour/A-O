@@ -85,7 +85,8 @@ export default function Countdown() {
             </p>
             <Ornament width={44} className="mt-6" />
             <p className="mt-5 font-display text-xl italic text-muted">
-              {wedding.couple.bride} and {wedding.couple.groom} are getting married.
+              {wedding.couple.first} and {wedding.couple.second} are celebrating their{" "}
+              {wedding.occasion.toLowerCase()}.
             </p>
           </Bloom>
         )}
@@ -94,7 +95,7 @@ export default function Countdown() {
           <Bloom>
             <p className="eyebrow">With every thanks to God</p>
             <p className="mt-4 font-display text-[clamp(34px,8vw,60px)] font-light leading-tight text-wine">
-              Married
+              Celebrated
             </p>
             <Ornament width={44} className="mt-6" />
             <p className="mt-5 font-display text-xl italic text-muted">

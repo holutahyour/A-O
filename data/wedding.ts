@@ -2,52 +2,35 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *  THE ONLY FILE YOU NEED TO EDIT
  * ─────────────────────────────────────────────────────────────────────────────
- *  Everything the website says lives here. Change a bank account number, add a
- *  gift, reword an answer - all of it happens in this file. You should never
- *  need to open a component.
+ *  Everything the website says lives here. Change a phone number, add a hotel,
+ *  reword an answer - all of it happens in this file. You should never need to
+ *  open a component.
  *
  *  Anything marked TODO still needs real information from the couple.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-export type GiftCategory = "Kitchen" | "Living" | "Laundry" | "Power" | "Bedroom"
-
-export type GiftItem = {
-  id: string
-  name: string
-  category: GiftCategory
-  /** Optional product photo in /public. Leave unset for the ornamental tile. */
-  imageUrl?: string
-}
-
-export type Fund = {
-  id: string
-  name: string
-  blurb: string
-}
-
-export type StoryEntry = {
-  id: string
-  title: string
-  when: string
-  body: string
-}
-
-export type GalleryImage = {
+export type Photo = {
   src: string
   alt: string
+}
+
+export type GalleryImage = Photo & {
   /**
-   * Real pixel dimensions. Three of these photographs were exported with white
-   * matting that had to be trimmed off, so they no longer share one aspect
-   * ratio - the grid needs the true numbers to reserve the right space and
-   * avoid a layout shift.
-   *
-   * If you replace a photo: drop the original in images/, point this entry at
-   * it in scripts/prepare-images.cjs, run `pnpm images`, and copy the width and
-   * height it prints back into this file.
+   * Real pixel dimensions, so the lightbox can reserve the right space and
+   * avoid a layout shift. `pnpm images` prints them for every gallery file.
    */
   width: number
   height: number
+}
+
+export type Hotel = {
+  id: string
+  name: string
+  /** The part of Ikeja it sits in, as a guest would say it to a driver. */
+  area: string
+  note: string
+  mapsUrl: string
 }
 
 export type Faq = { q: string; a: string }
@@ -65,77 +48,76 @@ export type InternationalAccount = {
 export const wedding = {
   /* ── The couple ─────────────────────────────────────────────────────────── */
   couple: {
-    bride: "Ayomide",
-    groom: "Opeyemi",
-    monogram: "AO",
-    hashtag: "#AYOYEMIALWAYS&4VER",
+    // In the order they are printed on the invitation card: Oluwabunmi is the
+    // bride, Anuoluwapo the groom.
+    first: "Oluwabunmi",
+    second: "Anuoluwapo",
+    /** The names in full, exactly as printed on the card. */
+    firstFull: "Oluwabunmi Adedayo",
+    secondFull: "Anuoluwapo Akintoye",
+    monogram: "OA",
+    // TODO(couple): add the hashtag if there is one. Null hides it everywhere.
+    hashtag: null as string | null,
   },
+
+  /** What the families are inviting guests to, as printed on the card. */
+  occasion: "Engagement Ceremony",
 
   /**
    * The ceremony as a fixed instant in time.
-   * 26 September 2026, 12:00 noon in Lagos. Lagos is UTC+1 all year round
+   * 5 December 2026, 12:00 noon in Lagos. Lagos is UTC+1 all year round
    * (West Africa Time, no daylight saving), so noon local is 11:00 UTC.
    * Stored as UTC so the countdown is correct from any timezone on earth.
    */
-  ceremonyAt: "2026-09-26T11:00:00.000Z",
+  ceremonyAt: "2026-12-05T11:00:00.000Z",
 
   /* ── The families, exactly as printed on the invitation ─────────────────── */
-  // Not shown on the site any more - the invitation now opens in the couple's
-  // own voice. Kept here so the wording is not lost if you want it back.
-  families: {
-    bride: "Evang. Olatunji and Late Mrs Abosede Israel Eweje",
-    groom: "Apostle Bamidele & Pst Mrs Kemi Olaide Ogunbore",
-  },
+  families: [
+    "Late Abiodun and Mrs Adeyemi Afeniforo",
+    "Late Deacon Olufemi and Mrs Titilayo Enilolobo",
+  ],
 
   /* ── Where ──────────────────────────────────────────────────────────────── */
-  venues: {
-    ceremony: {
-      label: "The Ceremony",
-      name: "The City of the Lord Church",
-      address:
-        "25, Kudirat Soule Str, off Coker Rd Orimolade Bus-stop, College Road, Ifako-Ijaiye, Lagos",
-      time: "12:00 PM",
-      // TODO(couple): replace with the exact pin from the QR code on the card
-      mapsUrl:
-        "https://www.google.com/maps/search/?api=1&query=The+City+of+the+Lord+Church%2C+25+Kudirat+Soule+Street%2C+Ifako-Ijaiye%2C+Lagos",
-    },
-    reception: {
-      label: "The Reception",
-      name: "Lagos African Church Grammar School (LAFRO)",
-      address: "College Bus stop, Ifako-Ijaiye, Lagos",
-      time: "Follows immediately",
-      // TODO(couple): replace with the exact pin from the QR code on the card
-      mapsUrl:
-        "https://www.google.com/maps/search/?api=1&query=Lagos+African+Church+Grammar+School+LAFRO%2C+College+Road%2C+Ifako-Ijaiye%2C+Lagos",
-    },
+  /** Short form, for the hero and the link preview. */
+  locality: "Ikeja, Lagos",
+
+  venue: {
+    label: "The Venue",
+    name: "Luxury Party Event Centre",
+    address: "Block G, Plot A2, M.K.O Abiola Gardens Road, beside Adonai Court, Ikeja, Lagos",
+    time: "12 Noon",
+    // TODO(couple): replace with the exact Google Maps pin for the hall.
+    mapsUrl:
+      "https://www.google.com/maps/search/?api=1&query=Luxury+Party+Event+Centre%2C+M.K.O+Abiola+Gardens+Road%2C+Ikeja%2C+Lagos",
   },
 
-  /* ── Reaching the couple ────────────────────────────────────────────────── */
+  /* ── Reaching the hosts ─────────────────────────────────────────────────── */
   rsvpPhones: [
-    { display: "+234 703 064 2133", tel: "+2347030642133" },
-    { display: "+234 906 665 5494", tel: "+2349066655494" },
+    { name: "Timilehin", display: "+234 809 437 7809", tel: "+2348094377809" },
+    { name: "Biola", display: "+234 916 292 8730", tel: "+2349162928730" },
   ],
 
   /**
    * The line invitation requests are sent to on WhatsApp. Digits only,
    * country code first and no plus sign, exactly as wa.me expects.
    */
+  // TODO(couple): confirm this number is on WhatsApp.
   whatsapp: {
-    number: "2347030642133",
-    display: "+234 703 064 2133",
+    number: "2348094377809",
+    display: "+234 809 437 7809",
   },
 
   /* ── Colour of the day, straight off the card ───────────────────────────── */
-  colours: [
-    { name: "Blush Pink", hex: "#F2A6AC" },
-    { name: "Champagne Gold", hex: "#F3D7B4" },
-  ],
+  colours: [{ name: "Onion Pink", hex: "#C77FA2" }],
 
-  /* ── Where the gifts go ─────────────────────────────────────────────────── */
+  /* ── Bless the couple ───────────────────────────────────────────────────── */
+  // TODO(couple): fill in all three. While any is empty the sheet shows a
+  // "details coming soon" notice with the RSVP numbers, never a half-filled
+  // account block.
   bank: {
-    accountName: "Ayomide Israel",
-    bankName: "Zenith Bank",
-    accountNumber: "2418407121",
+    accountName: "",
+    bankName: "",
+    accountNumber: "",
 
     /**
      * Optional second account for guests sending from abroad.
@@ -144,150 +126,105 @@ export const wedding = {
     international: null as InternationalAccount | null,
   },
 
-  /* ── The gift table ─────────────────────────────────────────────────────── */
-  // No prices: the couple ask for cash, and guests give what is on their heart.
-  // Edit freely - rename, remove, add your own. Each photo is a 4:3 card built
-  // by `pnpm images`: drop the original into images/gifts/, add it to GIFTS in
-  // scripts/prepare-images.cjs, then point `imageUrl` at /gifts/<id>.jpeg.
-  // Drop `imageUrl` and the item falls back to the ornamental tile.
-  giftItems: [
-    { id: "refrigerator", name: "Refrigerator", category: "Kitchen", imageUrl: "/gifts/refrigerator.jpeg" },
-    { id: "heavy-duty-blender", name: "Heavy Duty Blender", category: "Kitchen", imageUrl: "/gifts/heavy-duty-blender.jpeg" },
-    { id: "food-processor", name: "Food Processor", category: "Kitchen", imageUrl: "/gifts/food-processor.jpeg" },
-    { id: "toaster", name: "Toaster", category: "Kitchen", imageUrl: "/gifts/toaster.jpeg" },
-    { id: "rice-cooker", name: "Rice Cooker", category: "Kitchen", imageUrl: "/gifts/rice-cooker.jpeg" },
-    { id: "juicer", name: "Juicer", category: "Kitchen", imageUrl: "/gifts/juicer.jpeg" },
-    { id: "non-stick-cookware", name: "Set of Non-stick Cookware", category: "Kitchen", imageUrl: "/gifts/non-stick-cookware.jpeg" },
-    { id: "granite-cookware", name: "Set of Granite Cookware", category: "Kitchen", imageUrl: "/gifts/granite-cookware.jpeg" },
-    { id: "deep-fryer", name: "Deep Fryer", category: "Kitchen", imageUrl: "/gifts/deep-fryer.jpeg" },
-    { id: "washing-machine", name: "Automatic Washing Machine", category: "Laundry", imageUrl: "/gifts/washing-machine.jpeg" },
-    { id: "air-conditioner", name: "Air Conditioner", category: "Living", imageUrl: "/gifts/air-conditioner.jpeg" },
-    { id: "smart-tv", name: "Smart Television", category: "Living", imageUrl: "/gifts/smart-tv.jpeg" },
-    { id: "soundbar", name: "Soundbar", category: "Living", imageUrl: "/gifts/soundbar.jpeg" },
-  ] as GiftItem[],
-
-  /* ── The love funds ─────────────────────────────────────────────────────── */
-  funds: [
-    {
-      id: "honeymoon",
-      name: "Honeymoon",
-      blurb: "For a few quiet days to breathe, and a view neither of them has seen before.",
-    },
-    {
-      id: "new-home",
-      name: "New Home",
-      blurb: "For the first keys, the first meals, and the rooms they will make their own.",
-    },
-    {
-      id: "furnishing",
-      name: "Home Furnishing",
-      blurb: "For the sofa, the curtains, and everything that turns a house into theirs.",
-    },
-    {
-      id: "car",
-      name: "Car",
-      blurb: "For the journeys, the errands, and the everyday movement of a shared life.",
-    },
-    {
-      id: "bless-us",
-      name: "Bless Us",
-      blurb: "For anything at all. Give what is on your heart.",
-    },
-  ] as Fund[],
-
-  /* ── Their story ────────────────────────────────────────────────────────── */
-  // TODO(couple): the first entry is the real story. The three after it are still
-  // placeholder - replace them with how he asked and what you are looking forward
-  // to. Keep it short; three or four sentences each reads best on a phone.
-  story: [
-    {
-      id: "met",
-      title: "How we met",
-      when: "At his brother's introduction",
-      body: "We met at the introduction ceremony of Opeyemi's elder brother: a hall full of family, two people who had come only to celebrate somebody else. Neither of us was looking. God had already made the arrangement, and one conversation that afternoon turned out to be the first page of everything after it.",
-    },
-    {
-      id: "grew",
-      title: "Growing together",
-      when: "The years between",
-      body: "Long conversations, shared prayers, and the slow discovery that we were building the same dream. Grace met us in the middle and has not left since.",
-    },
-    {
-      id: "asked",
-      title: "The question",
-      when: "The yes",
-      body: "He asked. She said yes. Two families rejoiced, and what had been a private hope became a promise spoken out loud.",
-    },
-    {
-      id: "forever",
-      title: "And now, forever",
-      when: "26 September 2026",
-      body: "We are stepping into a home built on grace, patience, and joy. We would love for you to stand with us as we begin.",
-    },
-  ] as StoryEntry[],
+  /* ── Their story, in their own words ────────────────────────────────────── */
+  story: {
+    paragraphs: [
+      "What began as a simple meeting soon grew into a beautiful friendship. We got to know each other, shared conversations, laughed together, and slowly discovered how special our connection was.",
+      "Looking back, we can see how beautifully God was writing our story all along. What started with two people meeting in church has led us to this beautiful moment.",
+      "And now, with grateful hearts and so much joy, we’re getting married!",
+      "We can’t wait to begin this next chapter together and see all that God has in store for us.",
+    ],
+    /** The last line, set apart as the story's closing flourish. */
+    closing: "Our friendship became love, and now we’re choosing forever.",
+  },
 
   /* ── Photographs ────────────────────────────────────────────────────────── */
-  // An empty array hides the gallery section entirely.
-  gallery: [
+  // The photographs have not arrived yet, and the site is built not to show it:
+  // with `portrait` null the hero arch holds a bouquet that blooms around the
+  // date, and an empty `gallery` hides that section entirely.
+  //
+  // When they arrive: drop the originals in images/, list them in
+  // scripts/prepare-images.cjs, run `pnpm images`, then fill these in.
+  portrait: null as Photo | null,
+  gallery: [] as GalleryImage[],
+
+  /* ── Where to stay ──────────────────────────────────────────────────────── */
+  // Hotels in Ikeja, nearest the hall first. No prices or phone numbers on
+  // purpose - they go stale; each card links to the hotel on Google Maps.
+  // TODO(couple): confirm this list, and say here if rooms have been reserved
+  // or a group rate agreed anywhere.
+  hotels: [
     {
-      src: "/gallery/03-portrait.jpeg",
-      alt: "Ayomide resting her hand on Opeyemi's shoulder against a warm bronze backdrop",
-      width: 1067,
-      height: 1600,
+      id: "protea-select",
+      name: "Protea Hotel by Marriott Ikeja Select",
+      area: "Alausa, Ikeja",
+      note: "The closest to the hall, in the same Alausa neighbourhood.",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Protea+Hotel+by+Marriott+Ikeja+Select%2C+Alausa%2C+Ikeja%2C+Lagos",
     },
     {
-      src: "/gallery/01-together.jpeg",
-      alt: "Opeyemi in a deep green double-breasted suit with Ayomide leaning against his shoulder",
-      width: 1200,
-      height: 1600,
+      id: "radisson-ikeja",
+      name: "Radisson Hotel Lagos Ikeja",
+      area: "Isaac John Street, Ikeja GRA",
+      note: "On the GRA's restaurant strip, with plenty to do the evening before.",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Radisson+Hotel+Lagos+Ikeja%2C+Isaac+John+Street%2C+Ikeja+GRA",
     },
     {
-      src: "/gallery/02-hand-in-hand.jpeg",
-      alt: "Ayomide and Opeyemi standing hand in hand, she in an ivory dress holding calla lilies",
-      width: 1108,
-      height: 1600,
+      id: "marriott-ikeja",
+      name: "Lagos Marriott Hotel Ikeja",
+      area: "Joel Ogunnaike Street, Ikeja GRA",
+      note: "A full-service stay in the quiet of the GRA.",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Lagos+Marriott+Hotel+Ikeja%2C+Joel+Ogunnaike+Street%2C+Ikeja+GRA",
     },
     {
-      src: "/gallery/05-seated.jpeg",
-      alt: "The couple seated side by side, Ayomide holding her bouquet of calla lilies",
-      width: 1067,
-      height: 1600,
+      id: "sheraton-lagos",
+      name: "Sheraton Lagos Hotel",
+      area: "Mobolaji Bank Anthony Way, Ikeja",
+      note: "A long-standing Ikeja landmark, handy for guests flying in.",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Sheraton+Lagos+Hotel%2C+Mobolaji+Bank+Anthony+Way%2C+Ikeja",
     },
     {
-      src: "/gallery/06-chair.jpeg",
-      alt: "Ayomide seated in a wooden chair with her bouquet, Opeyemi standing behind her",
-      width: 1200,
-      height: 1600,
+      id: "ibis-ikeja",
+      name: "ibis Lagos Ikeja",
+      area: "Toyin Street, Ikeja",
+      note: "Simple, comfortable rooms at a gentler price.",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=ibis+Lagos+Ikeja%2C+Toyin+Street%2C+Ikeja",
     },
     {
-      src: "/gallery/04-shoulder.jpeg",
-      alt: "A close portrait of Ayomide in a birdcage veil leaning on Opeyemi's shoulder",
-      width: 1200,
-      height: 1600,
+      id: "lagos-airport-hotel",
+      name: "Lagos Airport Hotel",
+      area: "Obafemi Awolowo Way, Ikeja",
+      note: "Spacious grounds on Ikeja's main road.",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Lagos+Airport+Hotel%2C+Obafemi+Awolowo+Way%2C+Ikeja",
     },
-  ] as GalleryImage[],
+  ] as Hotel[],
 
   /* ── Questions guests actually ask ──────────────────────────────────────── */
   faq: [
     {
       q: "Can I bring my children?",
-      a: "We love your little ones dearly, but this celebration is for adults only. Thank you for understanding, and for making arrangements ahead of the day.",
+      a: "We love your little ones dearly, but children are not allowed at this celebration. Thank you for understanding, and for making arrangements ahead of the day.",
     },
     {
       q: "What should I wear?",
-      a: "The colours of the day are blush pink and champagne gold. Wear them if you can, and if not, simply come dressed for a joyful celebration.",
+      a: "The colour of the day is onion pink. Wear it if you can, and if not, simply come dressed for a joyful celebration.",
     },
     {
-      q: "What does “monetize all gifts” mean?",
-      a: "It means the couple would love to receive gifts as cash rather than as items. It lets them buy exactly what their new home needs, and saves you carrying anything to the venue. Everything you need is in the gift section above.",
+      q: "Where is the venue?",
+      a: "Luxury Party Event Centre is on M.K.O Abiola Gardens Road in Ikeja, beside Adonai Court. There is a map link and a scannable code in the section above.",
+    },
+    {
+      q: "I am coming from out of town. Where can I stay?",
+      a: "There are several good hotels in Ikeja, a short drive from the hall. We have listed a few on this page, each with a link to find it on the map.",
     },
     {
       q: "Can I bring a plus one?",
       a: "Our seating is planned around named guests. If you would like to bring someone, please call one of the RSVP numbers first so we can make room properly.",
-    },
-    {
-      q: "How do I get to the reception?",
-      a: "The reception is a short distance from the church, at Lagos African Church Grammar School by College Bus stop, and it begins immediately after the ceremony. Both venues have map links on this page.",
     },
     {
       q: "When should I RSVP by?",

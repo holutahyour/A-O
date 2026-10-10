@@ -9,7 +9,7 @@ import { longDate } from "@/lib/format"
  *
  * This matters more than almost anything else on the site: the URL will be
  * pasted into WhatsApp hundreds of times, and this image is the first thing
- * most guests will ever see of the wedding. It is drawn at the correct
+ * most guests will ever see of the day. It is drawn at the correct
  * 1200x630 rather than letting a portrait invitation photo be cropped to
  * ribbons by a chat client.
  *
@@ -19,7 +19,7 @@ import { longDate } from "@/lib/format"
 
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
-export const alt = `${wedding.couple.bride} and ${wedding.couple.groom}, ${longDate(
+export const alt = `${wedding.couple.first} and ${wedding.couple.second}, ${longDate(
   wedding.ceremonyAt,
 )}`
 
@@ -30,7 +30,7 @@ function Diamond() {
       style={{
         width: 9,
         height: 9,
-        backgroundColor: "#C9A24B",
+        backgroundColor: "#B0629C",
         transform: "rotate(45deg)",
         display: "flex",
       }}
@@ -43,7 +43,7 @@ export default async function Image() {
     join(process.cwd(), "assets", "fonts", "CormorantGaramond-Light.ttf"),
   )
 
-  const names = `${wedding.couple.bride} & ${wedding.couple.groom}`
+  const names = `${wedding.couple.first} & ${wedding.couple.second}`
   const date = longDate(wedding.ceremonyAt)
 
   return new ImageResponse(
@@ -56,13 +56,13 @@ export default async function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#FFFBF8",
+          backgroundColor: "#FFFAFD",
           // Satori interpolates `transparent` as transparent *black*, which
           // turns any fade into a grey smudge. Fading to a zero-alpha copy of
-          // the same colour keeps the wash blush and champagne.
+          // the same colour keeps the wash pink and lilac.
           backgroundImage:
-            "radial-gradient(ellipse 75% 75% at 8% 0%, rgba(247,217,218,0.85) 0%, rgba(247,217,218,0) 70%)," +
-            "radial-gradient(ellipse 70% 70% at 95% 100%, rgba(243,215,180,0.85) 0%, rgba(243,215,180,0) 70%)",
+            "radial-gradient(ellipse 75% 75% at 8% 0%, rgba(241,213,230,0.9) 0%, rgba(241,213,230,0) 70%)," +
+            "radial-gradient(ellipse 70% 70% at 95% 100%, rgba(233,218,243,0.95) 0%, rgba(233,218,243,0) 70%)",
           fontFamily: "Cormorant",
           position: "relative",
         }}
@@ -74,7 +74,7 @@ export default async function Image() {
             left: 28,
             right: 28,
             bottom: 28,
-            border: "1px solid rgba(201,162,75,0.45)",
+            border: "1px solid rgba(176,98,156,0.45)",
             borderRadius: 8,
             display: "flex",
           }}
@@ -84,18 +84,18 @@ export default async function Image() {
           style={{
             fontSize: 21,
             letterSpacing: 7,
-            color: "#8A6B70",
+            color: "#7D6679",
             display: "flex",
             textTransform: "uppercase",
           }}
         >
-          Together with their families
+          {wedding.occasion}
         </div>
 
         <div
           style={{
-            fontSize: 116,
-            color: "#8E1B2E",
+            fontSize: 92,
+            color: "#5C2350",
             marginTop: 22,
             display: "flex",
             lineHeight: 1.05,
@@ -106,11 +106,11 @@ export default async function Image() {
 
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 40 }}>
           <div
-            style={{ width: 92, height: 1, backgroundColor: "#C9A24B", display: "flex" }}
+            style={{ width: 92, height: 1, backgroundColor: "#B0629C", display: "flex" }}
           />
           <Diamond />
           <div
-            style={{ width: 92, height: 1, backgroundColor: "#C9A24B", display: "flex" }}
+            style={{ width: 92, height: 1, backgroundColor: "#B0629C", display: "flex" }}
           />
         </div>
 
@@ -118,7 +118,7 @@ export default async function Image() {
           style={{
             fontSize: 34,
             letterSpacing: 2,
-            color: "#3A2226",
+            color: "#33222F",
             marginTop: 36,
             display: "flex",
           }}
@@ -130,13 +130,13 @@ export default async function Image() {
           style={{
             fontSize: 20,
             letterSpacing: 5,
-            color: "#8A6B70",
+            color: "#7D6679",
             marginTop: 16,
             display: "flex",
             textTransform: "uppercase",
           }}
         >
-          Ifako-Ijaiye, Lagos
+          {wedding.locality}
         </div>
       </div>
     ),

@@ -7,6 +7,7 @@ import { dottedDate } from "@/lib/format"
 import { useGiftSheet } from "@/components/gift/GiftSheet"
 import Monogram from "@/components/ui/Monogram"
 import Ornament from "@/components/motion/Ornament"
+import ArchBloom from "@/components/ui/ArchBloom"
 
 export default function Hero() {
   const { open } = useGiftSheet()
@@ -46,18 +47,19 @@ export default function Hero() {
 
           <motion.h1
             {...rise(2)}
-            className="mt-5 font-display font-light text-[clamp(46px,13vw,96px)] leading-[0.95] text-wine"
+            className="mt-5 font-display font-light text-[clamp(44px,12vw,82px)] leading-[1.02] text-wine"
           >
-            {wedding.couple.bride}
+            {wedding.couple.first}
+            {/* Stacked the way the card stacks them: two ten-letter names and
+                an ampersand never share a line gracefully. */}
             <span
-              className="mx-3 inline-block align-middle font-script text-[clamp(52px,15vw,110px)] leading-none text-gold"
+              className="block font-script text-[0.8em] leading-[0.85] text-gold lg:pl-[0.4em]"
               aria-hidden="true"
             >
               &amp;
             </span>
-            <span className="sr-only">and </span>
-            <br className="hidden sm:block" />
-            {wedding.couple.groom}
+            <span className="sr-only"> and </span>
+            {wedding.couple.second}
           </motion.h1>
 
           <motion.div {...rise(3)}>
@@ -72,14 +74,16 @@ export default function Hero() {
             <span className="mx-3 text-gold" aria-hidden="true">
               |
             </span>
-            Ifako-Ijaiye, Lagos
+            {wedding.locality}
           </motion.p>
 
-          {/* Blush is an accent, never a text colour - it fails contrast on
-              ivory. The hashtag is information, so it gets wine. */}
-          <motion.p {...rise(5)} className="eyebrow mt-3 text-wine/75">
-            {wedding.couple.hashtag}
-          </motion.p>
+          {/* Pink is an accent, never a text colour - it fails contrast on
+              ivory. The hashtag is information, so it gets plum. */}
+          {wedding.couple.hashtag && (
+            <motion.p {...rise(5)} className="eyebrow mt-3 text-wine/75">
+              {wedding.couple.hashtag}
+            </motion.p>
+          )}
 
           <motion.div
             {...rise(6)}
@@ -87,7 +91,7 @@ export default function Hero() {
           >
             <a
               href="#rsvp"
-              className="rounded-full bg-wine px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-ivory shadow-[0_10px_30px_-12px_rgba(142,27,46,0.7)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-wine-deep"
+              className="rounded-full bg-wine px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-ivory shadow-[0_10px_30px_-12px_rgba(92,35,80,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-wine-deep"
             >
               RSVP
             </a>
@@ -96,12 +100,12 @@ export default function Hero() {
               onClick={() => open()}
               className="rounded-full border border-gold/60 px-8 py-4 font-ui text-[12px] font-medium uppercase tracking-[0.16em] text-wine transition-all duration-200 hover:-translate-y-0.5 hover:border-gold hover:bg-champagne/30"
             >
-              Send a Gift
+              Bless the Couple
             </button>
           </motion.div>
         </div>
 
-        {/* ── The portrait, in an arch ─────────────────────────────────── */}
+        {/* ── The arch: the portrait, or the bloom until it arrives ────── */}
         <motion.div
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.97 }}
           animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
@@ -117,14 +121,18 @@ export default function Hero() {
               drifts out of parallel because the arch radius follows the box. */}
           <div className="rounded-t-full rounded-b-2xl border border-gold/30 p-3">
             <div className="relative aspect-3/4 overflow-hidden rounded-t-full rounded-b-2xl bg-blush-50">
-              <Image
-                src="/hero.jpeg"
-                alt="Ayomide leaning on Opeyemi's shoulder in a birdcage veil, he in a deep green suit"
-                fill
-                priority
-                sizes="(max-width: 1024px) 300px, 500px"
-                className="object-cover object-[55%_28%]"
-              />
+              {wedding.portrait ? (
+                <Image
+                  src={wedding.portrait.src}
+                  alt={wedding.portrait.alt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 300px, 500px"
+                  className="object-cover object-[50%_28%]"
+                />
+              ) : (
+                <ArchBloom />
+              )}
             </div>
           </div>
         </motion.div>

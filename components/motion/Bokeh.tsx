@@ -32,13 +32,13 @@ function seeded(seed: number) {
  * turn into a grey halo.
  */
 const TINTS = [
-  ["rgba(242,166,172,0.7)", "rgba(242,166,172,0)"], // blush
-  ["rgba(243,215,180,0.7)", "rgba(243,215,180,0)"], // champagne
-  ["rgba(221,192,132,0.6)", "rgba(221,192,132,0)"], // soft gold
+  ["rgba(199,127,162,0.7)", "rgba(199,127,162,0)"], // onion pink
+  ["rgba(207,180,226,0.7)", "rgba(207,180,226,0)"], // lilac
+  ["rgba(214,166,201,0.6)", "rgba(214,166,201,0)"], // soft orchid
 ]
 
 const motes = (() => {
-  const rand = seeded(20260926)
+  const rand = seeded(20261205)
   return Array.from({ length: MOTE_COUNT }, (_, i) => {
     const size = Math.round(140 + rand() * 220)
     return {

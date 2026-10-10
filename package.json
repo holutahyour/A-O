@@ -1,8 +1,8 @@
 {
-  "name": "ayoyemi-wedding",
-  "version": "1.0.0",
+  "name": "oa-engagement",
+  "version": "2.0.0",
   "private": true,
-  "description": "Wedding website for Ayomide & Opeyemi — 26 September 2026",
+  "description": "Engagement ceremony website for Oluwabunmi & Anuoluwapo — 5 December 2026",
   "packageManager": "pnpm@11.5.1",
   "engines": {
     "node": ">=20"

@@ -6,17 +6,17 @@ import Ornament from "@/components/motion/Ornament"
 import SectionHeading from "@/components/ui/SectionHeading"
 
 /**
- * The QR is generated from the maps URL rather than cropped out of the card
- * image, so it stays sharp at any size and updates automatically if the couple
- * change the pin. It reproduces the printed card's affordance: point a second
- * phone at the screen.
+ * The QR is generated from the maps URL, so it stays sharp at any size and
+ * updates automatically if the couple change the pin. It is for the guest
+ * reading this on a laptop: point a phone at the screen and the hall opens in
+ * Maps.
  */
 async function mapQr(url: string): Promise<string> {
   return QRCode.toString(url, {
     type: "svg",
     margin: 0,
     errorCorrectionLevel: "M",
-    color: { dark: "#8E1B2E", light: "#00000000" },
+    color: { dark: "#5C2350", light: "#00000000" },
   })
 }
 
@@ -58,71 +58,65 @@ function ClockIcon() {
 }
 
 export default async function TheDay() {
-  const qr = await mapQr(wedding.venues.reception.mapsUrl)
-  const venues = [wedding.venues.ceremony, wedding.venues.reception]
+  const { venue } = wedding
+  const qr = await mapQr(venue.mapsUrl)
 
   return (
     <section id="the-day" className="section relative">
-      <div className="shell">
+      <div className="shell max-w-4xl">
         <SectionHeading
           eyebrow={longDate(wedding.ceremonyAt)}
           title="The Day"
-          lead="Both venues sit within Ifako-Ijaiye, a short distance apart. The reception begins as soon as the ceremony ends."
+          lead="One hall, one afternoon. Everything happens at the same venue in Ikeja, so once you have arrived there is nowhere else to find."
         />
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
-          {venues.map((venue, i) => (
-            <Bloom
-              as="article"
-              key={venue.name}
-              order={i}
-              className="flex flex-col rounded-2xl border border-blush-200 bg-ivory p-7 transition-colors hover:border-gold/40 sm:p-9"
+        <Bloom
+          as="article"
+          order={1}
+          className="mt-14 grid overflow-hidden rounded-2xl border border-blush-200 bg-ivory transition-colors hover:border-gold/40 md:grid-cols-[1fr_auto]"
+        >
+          <div className="flex flex-col p-7 sm:p-9">
+            <p className="eyebrow">{venue.label}</p>
+            <Ornament width={30} className="mt-4 justify-start" />
+
+            <h3 className="mt-5 font-display text-[clamp(27px,6vw,36px)] font-normal leading-tight text-wine">
+              {venue.name}
+            </h3>
+
+            <div className="mt-5 flex-1 space-y-3">
+              <p className="flex gap-2.5 text-[14px] leading-relaxed text-ink">
+                <PinIcon />
+                <span>{venue.address}</span>
+              </p>
+              <p className="flex gap-2.5 text-[14px] leading-relaxed text-ink">
+                <ClockIcon />
+                <span>{venue.time}</span>
+              </p>
+            </div>
+
+            <a
+              href={venue.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex items-center justify-center self-start rounded-full bg-wine px-7 py-3.5 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-wine-deep"
             >
-              <p className="eyebrow">{venue.label}</p>
-              <Ornament width={30} className="mt-4 justify-start" />
+              Open in Maps
+            </a>
+          </div>
 
-              <h3 className="mt-5 font-display text-[27px] font-normal leading-tight text-wine">
-                {venue.name}
-              </h3>
-
-              <div className="mt-5 flex-1 space-y-3">
-                <p className="flex gap-2.5 text-[14px] leading-relaxed text-ink">
-                  <PinIcon />
-                  <span>{venue.address}</span>
-                </p>
-                <p className="flex gap-2.5 text-[14px] leading-relaxed text-ink">
-                  <ClockIcon />
-                  <span>{venue.time}</span>
-                </p>
-              </div>
-
-              <a
-                href={venue.mapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-7 inline-flex items-center justify-center rounded-full border border-gold/50 px-6 py-3 font-ui text-[11px] font-medium uppercase tracking-[0.16em] text-wine transition-colors hover:border-gold hover:bg-champagne/30"
-              >
-                Open in Maps
-              </a>
-            </Bloom>
-          ))}
-        </div>
-
-        {/* ── The QR from the printed card ─────────────────────────────── */}
-        <Bloom order={2}>
-          <div className="mt-10 flex flex-col items-center gap-5 rounded-2xl bg-blush-50 p-8 sm:flex-row sm:justify-center sm:gap-9">
+          {/* ── The map code, for the guest reading on a bigger screen ───── */}
+          <div className="flex flex-col items-center justify-center gap-4 bg-blush-50 p-8 text-center md:w-64">
             <div
               className="h-[120px] w-[120px] shrink-0 [&_svg]:h-full [&_svg]:w-full"
               // Generated above from a URL we control.
               dangerouslySetInnerHTML={{ __html: qr }}
               role="img"
-              aria-label="QR code linking to the reception venue on Google Maps"
+              aria-label="QR code linking to the venue on Google Maps"
             />
-            <div className="text-center sm:text-left">
+            <div>
               <p className="eyebrow">Map to the hall</p>
-              <p className="mt-2 max-w-xs text-[14px] leading-relaxed text-ink">
-                Point a camera at this code to open the reception venue in Maps, the same
-                code printed on your invitation card.
+              <p className="mt-2 text-[13px] leading-relaxed text-ink">
+                Point a phone camera at this code to open the venue in Maps.
               </p>
             </div>
           </div>

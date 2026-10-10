@@ -10,7 +10,7 @@ CORS entirely.
 
 ## 1. Make the sheet
 
-Create a Google Sheet named something like **AyoYemi RSVPs**. Add a tab named
+Create a Google Sheet named something like **O&A RSVPs**. Add a tab named
 exactly `RSVPs`, and put these headers in row 1:
 
 | A | B | C | D | E | F | G |

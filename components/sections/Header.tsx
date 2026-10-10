@@ -8,7 +8,7 @@ import { useGiftSheet } from "@/components/gift/GiftSheet"
 const LINKS = [
   { href: "#story", label: "Our Story" },
   { href: "#the-day", label: "The Day" },
-  { href: "#gifts", label: "Gifts" },
+  { href: "#stay", label: "Stay" },
   { href: "#rsvp", label: "RSVP" },
 ]
 
@@ -75,7 +75,7 @@ export default function Header() {
                 onClick={() => open()}
                 className="rounded-full bg-wine px-5 py-2.5 font-ui text-[10px] font-medium uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-wine-deep"
               >
-                Send a Gift
+                Bless the Couple
               </button>
 
               <button

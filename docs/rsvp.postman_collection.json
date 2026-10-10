@@ -378,7 +378,7 @@
                 "rsvp"
               ]
             },
-            "description": "Must be one of: Both, Ceremony, Reception, Unable."
+            "description": "Must be one of: Attending, Unable."
           }
         },
         {

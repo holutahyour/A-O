@@ -1,23 +1,9 @@
-/**
- * Formatting helpers. Amounts are stored as integer naira everywhere and are
- * only turned into text at the render boundary - never earlier.
- */
+/** Formatting helpers. Every date is rendered in Lagos time. */
 
 const LAGOS = "Africa/Lagos"
 
-const nairaFormatter = new Intl.NumberFormat("en-NG", {
-  style: "currency",
-  currency: "NGN",
-  maximumFractionDigits: 0,
-})
-
-/** 450000 -> "₦450,000" */
-export function naira(amount: number): string {
-  return nairaFormatter.format(amount)
-}
-
 /**
- * The wedding date, written out in full, in Lagos time.
+ * The date, written out in full, in Lagos time.
  * The weekday is derived rather than typed by hand - nobody should be
  * hardcoding "Saturday" and hoping.
  */
@@ -31,29 +17,32 @@ export function longDate(iso: string): string {
   }).format(new Date(iso))
 }
 
-/** "26 September 2026" - the same date without the weekday. */
-export function shortDate(iso: string): string {
+/** "5 December" - for a sentence that already knows the year. */
+export function dayAndMonth(iso: string): string {
   return new Intl.DateTimeFormat("en-GB", {
     timeZone: LAGOS,
     day: "numeric",
     month: "long",
-    year: "numeric",
   }).format(new Date(iso))
 }
 
-/** "26 · 09 · 2026" - the hero's typographic treatment of the date. */
+function parts(iso: string, options: Intl.DateTimeFormatOptions) {
+  const found = new Intl.DateTimeFormat("en-GB", { timeZone: LAGOS, ...options }).formatToParts(
+    new Date(iso),
+  )
+  return (type: Intl.DateTimeFormatPartTypes) => found.find((p) => p.type === type)?.value ?? ""
+}
+
+/** "05 · 12 · 2026" - the hero's typographic treatment of the date. */
 export function dottedDate(iso: string): string {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: LAGOS,
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).formatToParts(new Date(iso))
-
-  const get = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === type)?.value ?? ""
-
+  const get = parts(iso, { day: "2-digit", month: "2-digit", year: "numeric" })
   return [get("day"), get("month"), get("year")].join(" · ")
+}
+
+/** The date in pieces - "05", "December", "2026" - for the hero's date seal. */
+export function dateParts(iso: string): { day: string; month: string; year: string } {
+  const get = parts(iso, { day: "2-digit", month: "long", year: "numeric" })
+  return { day: get("day"), month: get("month"), year: get("year") }
 }
 
 /**

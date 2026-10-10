@@ -9,7 +9,7 @@ import { NextResponse } from "next/server"
  * endpoint out of the client bundle and sidesteps CORS entirely.
  */
 
-const ATTENDING = new Set(["Both", "Ceremony", "Reception", "Unable"])
+const ATTENDING = new Set(["Attending", "Unable"])
 
 type Payload = {
   name: string

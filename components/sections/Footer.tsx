@@ -12,7 +12,7 @@ export default function Footer() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,162,75,0.16) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(199,127,162,0.22) 0%, transparent 70%)",
         }}
       />
 
@@ -20,7 +20,7 @@ export default function Footer() {
         <Monogram size={48} tone="ivory" />
 
         <p className="mt-8 font-display text-[clamp(24px,6vw,38px)] font-light leading-tight text-ivory">
-          {wedding.couple.bride}
+          {wedding.couple.first}
           <span
             className="ml-2 mr-5 font-script text-[1.3em] text-champagne"
             aria-hidden="true"
@@ -28,14 +28,16 @@ export default function Footer() {
             &amp;
           </span>
           <span className="sr-only">and </span>
-          {wedding.couple.groom}
+          {wedding.couple.second}
         </p>
 
         <p className="eyebrow mt-3 text-champagne/80">{longDate(wedding.ceremonyAt)}</p>
 
         <Ornament width={44} tone="ivory" className="mt-7" />
 
-        <p className="eyebrow mt-7 text-champagne">{wedding.couple.hashtag}</p>
+        {wedding.couple.hashtag && (
+          <p className="eyebrow mt-7 text-champagne">{wedding.couple.hashtag}</p>
+        )}
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
           {wedding.rsvpPhones.map((p) => (
@@ -44,7 +46,7 @@ export default function Footer() {
               href={`tel:${p.tel}`}
               className="tabular inline-block py-2.5 font-ui text-[14px] text-ivory/80 underline decoration-champagne/40 underline-offset-4 transition-colors hover:text-ivory hover:decoration-champagne"
             >
-              {p.display}
+              {p.name} · {p.display}
             </a>
           ))}
         </div>
